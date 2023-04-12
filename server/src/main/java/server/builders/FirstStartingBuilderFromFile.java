@@ -7,6 +7,8 @@ import general.validators.exceptions.NullException;
 
 import java.io.*;
 import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * Creating an initial collection object from a file
@@ -17,7 +19,6 @@ public class FirstStartingBuilderFromFile {
 
     /**
      * @return Collection of objects created earlier
-     * @throws NullException
      */
     public CollectionManager buildObject() throws NullException {
         List<Ticket> beans = null;
@@ -32,7 +33,8 @@ public class FirstStartingBuilderFromFile {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return new CollectionManager(beans);
+
+        return new CollectionManager(checkID(beans));
     }
 
     private FirstStartingBuilderFromFile(String filename) {
@@ -44,5 +46,19 @@ public class FirstStartingBuilderFromFile {
             instance = new FirstStartingBuilderFromFile(filename);
         }
         return instance;
+    }
+
+    private List<Ticket> checkID(List<Ticket> collectionFromFile) {
+        if (collectionFromFile==null) {
+            return new Vector<>();
+        }
+        Set<Integer> usedID = new java.util.HashSet<>(Set.of());
+        for (Ticket ticket : collectionFromFile) {
+            if (usedID.contains(ticket.getId())) {
+                ticket.setId(ticket.getNextID());
+            }
+            usedID.add(ticket.getId());
+        }
+        return collectionFromFile;
     }
 }

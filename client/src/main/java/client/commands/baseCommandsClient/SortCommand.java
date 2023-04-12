@@ -1,6 +1,5 @@
 package client.commands.baseCommandsClient;
 
-import client.utils.BeautfilListPrint;
 import general.network.requests.SortRequest;
 import general.network.responses.SortResponse;
 import client.serverManager.ServerManager;
@@ -21,7 +20,13 @@ public class SortCommand implements Executable {
         SortRequest request = new SortRequest();
         SortResponse response = (SortResponse) serverManager.sendRequestGetResponse(request, true);
         List<Ticket> collection = response.getResultList();
-        System.out.println(new BeautfilListPrint<>(collection).getBeautifulPrint());
+        if (response.getResult()) {
+            System.out.println("Элементы коллекции:");
+            int i = 1;
+            for (Ticket element : collection) {
+                System.out.println(i++ + ". " + element.beautifulString());
+            }
+        }
     }
 
     @Override
