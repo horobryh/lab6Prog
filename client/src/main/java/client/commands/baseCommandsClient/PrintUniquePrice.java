@@ -1,5 +1,6 @@
 package client.commands.baseCommandsClient;
 
+import client.utils.BeautfilListPrint;
 import general.network.requests.PrintUniquePriceRequest;
 import general.network.responses.PrintUniquePriceResponse;
 import client.serverManager.ServerManager;
@@ -18,7 +19,7 @@ public class PrintUniquePrice implements Executable {
         PrintUniquePriceRequest request = new PrintUniquePriceRequest();
         PrintUniquePriceResponse response = (PrintUniquePriceResponse) serverManager.sendRequestGetResponse(request, true);
         List<Integer> prices = response.getResultList();
-        System.out.println(prices);
+        System.out.println(new BeautfilListPrint<>(prices).getBeautifulPrint());
     }
 
     @Override

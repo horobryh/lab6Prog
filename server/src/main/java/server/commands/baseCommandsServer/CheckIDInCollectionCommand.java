@@ -2,37 +2,36 @@ package server.commands.baseCommandsServer;
 
 import general.network.Request;
 import general.network.Response;
-import general.network.responses.ShuffleResponse;
+import general.network.requests.CheckIDInCollectionRequest;
+import general.network.responses.CheckIDInCollectionResponse;
 import server.collectionManager.CollectionManager;
 import server.commands.Executable;
 
-/**
- * Command class that randomly shuffles a collection
- */
-public class ShuffleCommand implements Executable {
+public class CheckIDInCollectionCommand implements Executable {
     private final CollectionManager collectionManager;
     @Override
     public Response execute(Request request) {
-        collectionManager.shuffle();
-        return new ShuffleResponse(true);
+        Integer id = ((CheckIDInCollectionRequest) request).getId();
+        boolean result = collectionManager.checkIDInCollection(id);
+        return new CheckIDInCollectionResponse(result);
     }
 
     @Override
     public String getName() {
-        return "shuffle";
+        return null;
     }
 
     @Override
     public String getArgs() {
-        return "";
+        return null;
     }
 
     @Override
     public String getDescription() {
-        return "перемешать элементы коллекции в случайном порядке";
+        return null;
     }
 
-    public ShuffleCommand(CollectionManager collectionManager) {
+    public CheckIDInCollectionCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
 }

@@ -8,7 +8,6 @@ import general.models.Ticket;
 import java.io.Serializable;
 
 public class UpdateRequest extends Request implements Serializable {
-    private static final Class<? extends Response> responseClassLink = UpdateResponse.class;
     private final Ticket ticket;
     private final Integer id;
     public UpdateRequest(Integer id, Ticket ticket) {

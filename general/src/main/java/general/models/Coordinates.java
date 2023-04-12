@@ -3,12 +3,13 @@ package general.models;
 import com.opencsv.bean.CsvBindByName;
 import general.validators.baseValidators.NotNull;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Coordinates model class
  */
-public class Coordinates extends BaseModelWithValidators {
+public class Coordinates extends BaseModelWithValidators implements Serializable {
     public void setValidators() {
         validators.put("x", List.of(new NotNull()));
         validators.put("y", List.of(new NotNull()));

@@ -26,12 +26,11 @@ public class AddIfMinCommand implements Executable {
         }
 
         Ticket newTicket = ((AddIfMinRequest) request).getTicket();
+        newTicket.setId(newTicket.getNextID());
         if (new TicketNameComparator().compare(element, newTicket) < 0) {
             collectionManager.add(newTicket);
-            System.out.println("Добавление прошло успешно");
             return new AddIfMinResponse(true, true);
         } else {
-            System.out.println("Объект больше минимального, не добавлен");
             return new AddIfMinResponse(true, false);
         }
     }

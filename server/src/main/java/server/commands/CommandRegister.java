@@ -36,6 +36,7 @@ public class CommandRegister {
         commandManager.regNewCommand("update", new UpdateCommand(collectionManager));
         commandManager.regNewCommand("sort", new SortCommand(collectionManager));
         commandManager.regNewCommand("show", new ShowCommand(collectionManager));
+        commandManager.regNewCommand("__check_id_in_collection", new CheckIDInCollectionCommand(collectionManager));
 
     }
 }

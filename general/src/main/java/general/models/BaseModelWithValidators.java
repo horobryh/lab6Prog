@@ -3,13 +3,14 @@ package general.models;
 import general.validators.Verifiable;
 import general.validators.exceptions.ValidatorException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * An abstract class of a base model that has field validation
  */
-public abstract class BaseModelWithValidators {
+public abstract class BaseModelWithValidators implements Serializable {
     static HashMap<String, List<Verifiable>> validators = new HashMap<>();
     public static boolean checkAllConditionsByKey(String object, String key) {
         for (Verifiable validator : getValidatorsByKey(key)) {

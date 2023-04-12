@@ -1,5 +1,6 @@
 package client.commands.baseCommandsClient;
 
+import client.utils.BeautfilListPrint;
 import general.network.requests.PrintFieldAscendingDiscountRequest;
 import general.network.responses.PrintFieldAscendingDiscountResponse;
 import client.serverManager.ServerManager;
@@ -19,7 +20,7 @@ public class PrintFieldAscendingDiscountCommand implements Executable {
         PrintFieldAscendingDiscountRequest request = new PrintFieldAscendingDiscountRequest();
         PrintFieldAscendingDiscountResponse response = (PrintFieldAscendingDiscountResponse) serverManager.sendRequestGetResponse(request, true);
         List<Long> discounts = response.getResultList();
-        System.out.println(discounts);
+        System.out.println(new BeautfilListPrint<>(discounts).getBeautifulPrint());
     }
 
     @Override

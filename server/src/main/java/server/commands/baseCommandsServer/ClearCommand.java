@@ -16,7 +16,6 @@ public class ClearCommand implements Executable {
     @Override
     public Response execute(Request request) {
         collectionManager.clear();
-        System.out.println("Очистка прошла успешно");
         return new ClearResponse(true);
     }
 

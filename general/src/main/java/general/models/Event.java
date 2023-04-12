@@ -7,6 +7,7 @@ import general.validators.baseValidators.NotNull;
 import general.validators.baseValidators.SizeNumber;
 import general.validators.exceptions.WrongIDException;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Set;
 /**
  * Event model class
  */
-public class Event extends BaseModelWithValidators implements AutomaticID<Long> {
+public class Event extends BaseModelWithValidators implements AutomaticID<Long>, Serializable {
     private static Long lastID = 1L;
     private static Set<Long> usedID = new HashSet<>();
     @CsvBindByName(column = "EventID", required = true)

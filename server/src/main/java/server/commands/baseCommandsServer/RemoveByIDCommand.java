@@ -18,10 +18,8 @@ public class RemoveByIDCommand implements Executable {
         Integer id = ((RemoveByIDRequest) request).getId();
         if (Ticket.checkIDInUsed(id)) {
             collectionManager.removeByID(id);
-            System.out.println("Удаление прошло успешно");
             return new RemoveByIDResponse(true, true);
         } else {
-            System.out.println("Данный ID не найден в элементах коллекции");
             return new RemoveByIDResponse(true, false);
         }
     }

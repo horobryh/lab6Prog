@@ -108,4 +108,8 @@ public class CollectionManager {
         this.collection = new Vector<>(collection);
         this.initializationDate = new Date();
     }
+
+    public boolean checkIDInCollection(Integer id) {
+        return collection.stream().map(Ticket::getId).toList().contains(id);
+    }
 }

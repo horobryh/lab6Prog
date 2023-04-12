@@ -6,17 +6,17 @@ import general.network.requests.*;
 import java.util.HashMap;
 
 public class RequestManager {
-    private HashMap<Class<? extends Request>, String> requestToCommandKey;
+    private HashMap<Class<? extends Request>, String> requestToCommandKey = new HashMap<>();
     private static RequestManager instance = null;
 
-    public RequestManager getInstance() {
+    public static RequestManager getInstance() {
         if (instance == null){
             instance = new RequestManager();
         }
         return instance;
     }
 
-    public RequestManager() {
+    private RequestManager() {
         registerRequests();
     }
 
@@ -32,6 +32,7 @@ public class RequestManager {
         requestToCommandKey.put(ShuffleRequest.class, "shuffle");
         requestToCommandKey.put(SortRequest.class, "sort");
         requestToCommandKey.put(UpdateRequest.class, "update");
+        requestToCommandKey.put(CheckIDInCollectionRequest.class, "__check_id_in_collection");
     }
 
     public String getCommandKeyByRequestClass(Class<? extends Request> requestClass) {

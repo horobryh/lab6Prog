@@ -33,13 +33,6 @@ public class CommandManager {
 
     public Response executeCommand (Request request) throws IllegalArgumentException {
         return commands.get(requestManager.getCommandKeyByRequestClass(request.getClass())).execute(request);
-        // TODO: исключения?
-//        Scanner scanner = scanners.length > 0 ? scanners[0] : new Scanner(System.in);
-//        Executable command = commands.get(args[0]);
-//        if (command == null) {
-//            throw new IllegalArgumentException("Введенной команды не существует.");
-//        }
-//        command.execute(Arrays.copyOfRange(args, 1, args.length), scanner);
     }
 
     public HashMap<String, Executable> getCommands() {

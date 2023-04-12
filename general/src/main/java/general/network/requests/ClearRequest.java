@@ -7,5 +7,4 @@ import general.network.responses.ClearResponse;
 import java.io.Serializable;
 
 public class ClearRequest extends Request implements Serializable {
-    public static final Class<? extends Response> responseClassLink = ClearResponse.class;
 }

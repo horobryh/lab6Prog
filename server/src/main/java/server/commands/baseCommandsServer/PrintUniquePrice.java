@@ -18,7 +18,6 @@ public class PrintUniquePrice implements Executable {
     @Override
     public Response execute(Request request) {
         List<Integer> prices = collectionManager.getCollection().stream().map(Ticket::getPrice).distinct().sorted().toList();
-        System.out.println(prices);
         return new PrintUniquePriceResponse(true, prices);
     }
 

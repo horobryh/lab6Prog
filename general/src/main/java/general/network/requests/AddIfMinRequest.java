@@ -8,7 +8,6 @@ import general.models.Ticket;
 import java.io.Serializable;
 
 public class AddIfMinRequest extends Request implements Serializable {
-    private final static Class<? extends Response> responseClassLink = AddIfMinResponse.class;
     private Ticket ticket;
 
     public AddIfMinRequest(Ticket ticket) {

@@ -3,12 +3,13 @@ package general.models;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 import com.opencsv.bean.CsvRecurse;
-import validators.baseValidators.NotBlank;
-import validators.baseValidators.NotNull;
-import validators.baseValidators.SizeNumber;
-import validators.baseValidators.SizeString;
-import validators.exceptions.NullException;
+import general.validators.baseValidators.NotBlank;
+import general.validators.baseValidators.NotNull;
+import general.validators.baseValidators.SizeNumber;
+import general.validators.baseValidators.SizeString;
+import general.validators.exceptions.NullException;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Set;
 /**
  * Ticket model class
  */
-public class Ticket extends BaseModelWithValidators implements AutomaticID<Integer>, Comparable<Ticket> {
+public class Ticket extends BaseModelWithValidators implements Serializable, AutomaticID<Integer>, Comparable<Ticket> {
     private static Integer lastID = 0;
     private static Set<Integer> usedID = new HashSet<>();
     @CsvBindByName(required = true)

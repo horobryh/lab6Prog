@@ -40,7 +40,7 @@ public class RemoveByIDCommand implements Executable {
 
     @Override
     public String getName() {
-        return "remove by id";
+        return "remove_by_id";
     }
 
     @Override

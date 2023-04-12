@@ -10,10 +10,13 @@ import server.commands.Executable;
  */
 public class HelpCommand implements Executable {
     private final CommandManager commandManager;
+
     @Override
     public Response execute(Request request) {
-        for (Executable command: commandManager.getCommands().values()) {
-            System.out.println(command.getName() + " " + command.getArgs() + "\t" + command.getDescription());
+        for (Executable command : commandManager.getCommands().values()) {
+            if (command.getName() != null) {
+                System.out.println(command.getName() + " " + command.getArgs() + "\t" + command.getDescription());
+            }
         }
         return null;
     }

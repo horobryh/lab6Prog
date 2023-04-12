@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 public class AddRequest extends Request implements Serializable {
     private final Ticket ticket;
-    private static final Class<? extends Response> responseClassLink = AddResponse.class;
 
     public AddRequest(Ticket ticket) {
         this.ticket = ticket;

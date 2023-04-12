@@ -1,7 +1,9 @@
 package client.commands.baseCommandsClient;
 
 import client.builders.TicketBuilder;
+import general.network.requests.CheckIDInCollectionRequest;
 import general.network.requests.UpdateRequest;
+import general.network.responses.CheckIDInCollectionResponse;
 import general.network.responses.UpdateResponse;
 import client.serverManager.ServerManager;
 import client.commands.Executable;
@@ -23,7 +25,17 @@ public class UpdateCommand implements Executable {
         } catch (NumberFormatException e) {
             System.out.println("Введенный аргумент не может быть представлен в качестве id");
             return;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Не передан ID в аргументах команды");
+            return;
         }
+        CheckIDInCollectionRequest requestID = new CheckIDInCollectionRequest(id);
+        CheckIDInCollectionResponse responseID = (CheckIDInCollectionResponse) serverManager.sendRequestGetResponse(requestID, true);
+        if (!responseID.getResult()) {
+            System.out.println("Такого ID нет в коллекции");
+            return;
+        }
+
         Ticket newElement = new TicketBuilder(scanners[0]).buildObject();
         UpdateRequest request = new UpdateRequest(id, newElement);
         UpdateResponse response = (UpdateResponse) serverManager.sendRequestGetResponse(request, true);

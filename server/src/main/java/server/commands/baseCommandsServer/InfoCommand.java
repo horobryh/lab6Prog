@@ -20,9 +20,6 @@ public class InfoCommand implements Executable {
     public Response execute(Request request) {
         Vector<Ticket> collectionElements = collectionManager.getCollection();
         Date initializationDate = collectionManager.getInitializationDate();
-        System.out.println("Коллекция типа Vector<Ticket>");
-        System.out.println("Дата инициализации: " + initializationDate);
-        System.out.println("Количество элементов: " + collectionElements.size());
         return new InfoResponse(true, collectionElements.stream().toList(), initializationDate);
     }
 

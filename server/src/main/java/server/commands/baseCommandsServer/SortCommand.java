@@ -15,7 +15,6 @@ public class SortCommand implements Executable {
     @Override
     public Response execute(Request request) {
         collectionManager.sortCollection();
-        System.out.println(collectionManager.getCollection());
         return new SortResponse(true, collectionManager.getCollection());
     }
 

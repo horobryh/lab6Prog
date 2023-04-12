@@ -17,7 +17,6 @@ public class PrintFieldAscendingDiscountCommand implements Executable {
     @Override
     public Response execute(Request request) {
         List<Long> discounts = collectionManager.getCollection().stream().map(Ticket::getDiscount).sorted().toList();
-        System.out.println(discounts);
         return new PrintFieldAscendingDiscountResponse(true, discounts);
     }
 

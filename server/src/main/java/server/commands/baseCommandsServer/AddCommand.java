@@ -1,5 +1,6 @@
 package server.commands.baseCommandsServer;
 
+import general.models.Ticket;
 import general.network.Request;
 import general.network.Response;
 import general.network.requests.AddRequest;
@@ -20,8 +21,9 @@ public class AddCommand implements Executable {
 
     @Override
     public Response execute(Request request) {
+        Ticket ticket = ((AddRequest) request).getTicket();
+        ticket.setId(ticket.getNextID());
         this.collectionManager.add(((AddRequest) request).getTicket());
-        System.out.println("Добавление прошло успешно");
         return new AddResponse(true);
     }
 

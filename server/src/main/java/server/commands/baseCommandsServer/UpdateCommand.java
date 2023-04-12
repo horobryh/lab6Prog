@@ -1,14 +1,15 @@
 package server.commands.baseCommandsServer;
 
+import general.models.Ticket;
 import general.network.Request;
 import general.network.Response;
 import general.network.requests.UpdateRequest;
 import general.network.responses.UpdateResponse;
-import server.collectionManager.CollectionManager;
-import server.commands.Executable;
-import general.models.Ticket;
 import general.validators.exceptions.EmptyCollectionException;
 import general.validators.exceptions.IDNotFoundException;
+import server.collectionManager.CollectionManager;
+import server.commands.Executable;
+
 
 /**
  * Command class that updates object information by its ID
@@ -21,11 +22,7 @@ public class UpdateCommand implements Executable {
         Ticket elementForUpdating;
         try {
             elementForUpdating = collectionManager.getElementByID(id);
-        } catch (IDNotFoundException e) {
-            System.out.println("Введенный ID отсутствует в коллекции");
-            return new UpdateResponse(false);
-        } catch (EmptyCollectionException e) {
-            System.out.println("В данный момент коллекция пуста");
+        } catch (IDNotFoundException | EmptyCollectionException e) {
             return new UpdateResponse(false);
         }
         Ticket newElement = ((UpdateRequest) request).getTicket();
@@ -37,7 +34,6 @@ public class UpdateCommand implements Executable {
         elementForUpdating.setPrice(newElement.getPrice());
         elementForUpdating.setType(newElement.getType());
 
-        System.out.println("Элемент успешно обновлен");
         return new UpdateResponse(true);
 
     }

@@ -11,4 +11,8 @@ public abstract class Response implements Serializable {
     public Boolean getResult() {
         return this.result;
     }
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }
