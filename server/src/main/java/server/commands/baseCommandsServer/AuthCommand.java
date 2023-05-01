@@ -17,24 +17,23 @@ public class AuthCommand implements Executable {
     @Override
     public Response execute(Request request) {
         try {
-            User user = authorization(request);
-            return new AuthResponse(user.getId() != null, user);
+            User user = request.getUser();
+
+            if (server.getDataBaseManager().checkUserInDB(user)) {
+                if (server.getDataBaseManager().checkPassword(user)) {
+                    user = server.getDataBaseManager().setUserID(user);
+                    return new AuthResponse(user.getId() != null, user, "Авторизация прошла успешно.");
+                } else {
+                    user = new User(null, null);
+                    return new AuthResponse(user.getId() != null, user, "Пароль неправильный.");
+                }
+            } else {
+                user = server.getDataBaseManager().createUser(user);
+                return new AuthResponse(user.getId() != null, user, "Регистрация нового пользователя прошла успешно.");
+            }
         } catch (SQLException | NoSuchAlgorithmException ignored) {
         }
         return new Response(false) {};
-    }
-
-    public User authorization(Request request) throws SQLException, NoSuchAlgorithmException {
-        User user = request.getUser();
-
-        if (server.getDataBaseManager().checkUserInDB(user)) {
-            if (server.getDataBaseManager().checkPassword(user)) {
-                return server.getDataBaseManager().setUserID(user);
-            }
-            return user;
-        } else {
-            return server.getDataBaseManager().createUser(user);
-        }
     }
 
     @Override

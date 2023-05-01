@@ -40,9 +40,17 @@ public class AuthCommand implements Executable {
         AuthRequest authRequest = new AuthRequest(new User(login, password));
         AuthResponse authResponse = (AuthResponse) serverManager.sendRequestGetResponse(authRequest, true);
         if (authResponse.getResult()) {
-            System.out.println("Успешно!");
+            if (authResponse.getMessage().equals("")) {
+                System.out.println("Авторизация прошла успешно.");
+            } else {
+                System.out.println(authResponse.getMessage());
+            }
         } else {
-            System.out.println("Введены неверные логин/пароль. Завершение работы...");
+            if (authResponse.getMessage().equals("")) {
+                System.out.println("Произошла ошибка авторизации. Завершение работы.");
+            } else {
+                System.out.println(authResponse.getMessage());
+            }
             exit(0);
         }
         return authResponse.getUser();

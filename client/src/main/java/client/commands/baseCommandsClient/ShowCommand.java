@@ -12,7 +12,6 @@ import java.util.Scanner;
  * Command class that prints the elements of a collection
  */
 public class ShowCommand implements Executable {
-    // TODO: добавить вывод владельца обьекта
     private final ServerManager serverManager;
     @Override
     public void execute(String[] args, Scanner... scanner) {

@@ -34,7 +34,7 @@ public class FirstStartBuilderFromDB {
             newTicket.setDiscount(resultSet.getLong("td"));
             newTicket.setComment(resultSet.getString("tc"));
             newTicket.setType(TicketType.valueOf(resultSet.getString("tt")));
-            User user = new User(null, null);
+            User user = new User(resultSet.getString("tcul"), null);
             user.setId(resultSet.getInt("tcuid"));
             newTicket.setCreationUser(user);
             Event event = new Event();
@@ -44,7 +44,7 @@ public class FirstStartBuilderFromDB {
             event.setEventType(EventType.valueOf(resultSet.getString("et")));
             event.setDescription(resultSet.getString("edesc"));
             event.setMinAge(resultSet.getLong("ema"));
-            User user2 = new User(null, null);
+            User user2 = new User(resultSet.getString("ecul"), null);
             user2.setId(resultSet.getInt("ecuid"));
             event.setCreationUser(user2);
             newTicket.setEvent(event);

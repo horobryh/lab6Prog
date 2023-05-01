@@ -220,6 +220,7 @@ public class Ticket extends BaseModelWithValidators implements Serializable, Aut
         r += ", comment: " + getComment();
         r += ", type: " + getType();
         r += ", event: [" + getEvent().beautifulString() + "]";
+        r += ", creationUserLogin: " + getCreationUser().getLogin();
         return r;
     }
 

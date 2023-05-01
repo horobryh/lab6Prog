@@ -135,7 +135,7 @@ public class DataBaseManager {
 
     public ResultSet getAllElements() throws SQLException {
         Statement statement = connection.createStatement();
-        return statement.executeQuery("SELECT t.id tid, t.name tname, t.\"coordinateX\" tx, t.\"coordinateY\" ty, t.\"creationDate\" tcd, t.price tp, t.discount td, t.comment tc, t.type tt, t.\"eventID\" teid, t.\"creationUserID\" tcuid, ev.id eid, ev.name ename, ev.date ed, ev.\"minAge\" ema, ev.description edesc, ev.\"eventType\" et, ev.creationuserid ecuid FROM \"PTickets\" t JOIN \"PEvents\" ev ON t.\"eventID\"=ev.id");
+        return statement.executeQuery("SELECT t.id tid, t.name tname, t.\"coordinateX\" tx, t.\"coordinateY\" ty, t.\"creationDate\" tcd, t.price tp, t.discount td, t.comment tc, t.type tt, t.\"eventID\" teid, t.\"creationUserID\" tcuid, ev.id eid, ev.name ename, ev.date ed, ev.\"minAge\" ema, ev.description edesc, ev.\"eventType\" et, ev.creationuserid ecuid, tu.login tcul, eu.login ecul FROM \"PTickets\" t JOIN \"PEvents\" ev ON t.\"eventID\"=ev.id JOIN \"PUsers\" tu ON t.\"creationUserID\"=tu.id JOIN \"PUsers\" eu ON ev.creationuserid = eu.id");
     }
 
     public int[] updateTicket(Ticket ticket) throws SQLException {
