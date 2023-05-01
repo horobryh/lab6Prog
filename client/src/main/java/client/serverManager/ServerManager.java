@@ -1,7 +1,7 @@
 package client.serverManager;
 
+import general.models.User;
 import general.network.Request;
-import org.apache.logging.log4j.core.util.JsonUtils;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -12,8 +12,9 @@ import java.nio.channels.SocketChannel;
 
 public class ServerManager {
     private static ServerManager instance = null;
-    private InetAddress inetAddress;
-    private Integer port;
+    private final InetAddress inetAddress;
+    private final Integer port;
+    private User user;
 
     public ServerManager(InetAddress inetAddress, Integer port) {
         this.inetAddress = inetAddress;
@@ -27,12 +28,9 @@ public class ServerManager {
         return instance;
     }
 
-    public static void setInstance(ServerManager instance) {
-        ServerManager.instance = instance;
-    }
-
     public Object sendRequestGetResponse(Request request, boolean responseNeeding) {
         SocketChannel socketChannel = getNewSocketChannel();
+        if (user != null) request.setUser(user);
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -43,7 +41,7 @@ public class ServerManager {
 
             socketChannel.write(buffer);
         } catch (IOException e) {
-            System.out.println("Произошла ошибка отправки Request");
+            System.out.println("Произошла ошибка отправки Request " + e);
         }
 
         if (responseNeeding) {
@@ -74,15 +72,6 @@ public class ServerManager {
         return null;
     }
 
-    public Socket getNewSocket() {
-        try (Socket socket = new Socket(this.inetAddress, this.port);) {
-            return socket;
-        } catch (IOException e) {
-            System.out.println("Произошла ошибка при получении сокета.");
-            return null;
-        }
-    }
-
     public SocketChannel getNewSocketChannel() {
         try {
             SocketChannel socketChannel = SocketChannel.open();
@@ -97,5 +86,13 @@ public class ServerManager {
             System.out.println("Произошла ошибка получения socketChannel");
             return null;
         }
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

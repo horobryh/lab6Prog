@@ -20,6 +20,7 @@ import java.util.Set;
  */
 public class Ticket extends BaseModelWithValidators implements Serializable, AutomaticID<Integer>, Comparable<Ticket> {
     private static Integer lastID = 0;
+    private User creationUser;
     private static Set<Integer> usedID = new HashSet<>();
     @CsvBindByName(required = true)
     private int id;
@@ -220,5 +221,13 @@ public class Ticket extends BaseModelWithValidators implements Serializable, Aut
         r += ", type: " + getType();
         r += ", event: [" + getEvent().beautifulString() + "]";
         return r;
+    }
+
+    public void setCreationUser(User user) {
+        this.creationUser = user;
+    }
+
+    public User getCreationUser() {
+        return this.creationUser;
     }
 }

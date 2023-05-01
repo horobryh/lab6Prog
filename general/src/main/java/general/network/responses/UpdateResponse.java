@@ -8,4 +8,8 @@ public class UpdateResponse extends Response implements Serializable {
     public UpdateResponse(Boolean result) {
         super(result);
     }
+
+    public UpdateResponse(Boolean result, String message) {
+        super(result, message);
+    }
 }

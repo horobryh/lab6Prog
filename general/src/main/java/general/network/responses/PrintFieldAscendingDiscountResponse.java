@@ -12,6 +12,11 @@ public class PrintFieldAscendingDiscountResponse extends Response implements Ser
         this.resultList = resultList;
     }
 
+    public PrintFieldAscendingDiscountResponse(Boolean result, List<Long> resultList, String message) {
+        super(result, message);
+        this.resultList = resultList;
+    }
+
     public List<Long> getResultList() {
         return this.resultList;
     }

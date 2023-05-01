@@ -8,7 +8,7 @@ import general.network.responses.ShowResponse;
 import server.collectionManager.CollectionManager;
 import server.commands.Executable;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Command class that prints the elements of a collection
@@ -17,7 +17,7 @@ public class ShowCommand implements Executable {
     private final CollectionManager collectionManager;
     @Override
     public Response execute(Request request) {
-        Vector<Ticket> collection = collectionManager.getCollection();
+        List<Ticket> collection = collectionManager.getCollection();
         collection.sort(new TicketIDComparator());
         return new ShowResponse(true, collectionManager.getCollection());
     }

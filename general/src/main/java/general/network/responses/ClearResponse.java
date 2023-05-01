@@ -8,4 +8,7 @@ public class ClearResponse extends Response implements Serializable {
     public ClearResponse(Boolean result) {
         super(result);
     }
+    public ClearResponse(Boolean result, String message) {
+        super(result, message);
+    }
 }

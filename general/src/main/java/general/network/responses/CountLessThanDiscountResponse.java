@@ -5,9 +5,14 @@ import general.network.Response;
 import java.io.Serializable;
 
 public class CountLessThanDiscountResponse extends Response implements Serializable {
-    private Long count;
+    private final Long count;
     public CountLessThanDiscountResponse(Boolean result, Long count) {
         super(result);
+        this.count = count;
+    }
+
+    public CountLessThanDiscountResponse(Boolean result, Long count, String message) {
+        super(result, message);
         this.count = count;
     }
 

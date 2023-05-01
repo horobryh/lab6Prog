@@ -19,6 +19,7 @@ import java.util.Set;
 public class Event extends BaseModelWithValidators implements AutomaticID<Long>, Serializable {
     private static Long lastID = 1L;
     private static Set<Long> usedID = new HashSet<>();
+    private User creationUser;
     @CsvBindByName(column = "EventID", required = true)
     private Long id;
     @CsvBindByName(column = "EventName", required = true)
@@ -43,7 +44,7 @@ public class Event extends BaseModelWithValidators implements AutomaticID<Long>,
         this.eventType = eventType;
     }
 
-    public Event(Long id, String name, LocalDateTime date, Long minAge, String description, EventType eventType) throws WrongIDException {
+    public Event(Long id, String name, LocalDateTime date, Long minAge, String description, EventType eventType) {
         super();
         if (!checkIDInUsed(id)) {
             lastID = id;
@@ -66,7 +67,7 @@ public class Event extends BaseModelWithValidators implements AutomaticID<Long>,
         return id;
     }
 
-    private void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -151,5 +152,13 @@ public class Event extends BaseModelWithValidators implements AutomaticID<Long>,
 
     public String beautifulString() {
         return "id: " + getId() + ", name: " + getName() + ", date: " + getDate() + ", minAge: " + getMinAge() + ", description: " + getDescription() + ", eventType: " + getEventType();
+    }
+
+    public void setCreationUser(User user) {
+        this.creationUser = user;
+    }
+
+    public User getCreationUser() {
+        return this.creationUser;
     }
 }

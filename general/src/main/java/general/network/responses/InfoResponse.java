@@ -16,6 +16,12 @@ public class InfoResponse extends Response implements Serializable {
         this.initializationDate = initializationDate;
     }
 
+    public InfoResponse(Boolean result, List<Ticket> resultList, Date initializationDate, String message) {
+        super(result, message);
+        this.resultList = resultList;
+        this.initializationDate = initializationDate;
+    }
+
     public List<Ticket> getResultList() {
         return this.resultList;
     }

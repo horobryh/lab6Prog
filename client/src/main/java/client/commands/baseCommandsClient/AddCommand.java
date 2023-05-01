@@ -21,6 +21,8 @@ public class AddCommand implements Executable {
     @Override
     public void execute(String[] args, Scanner... scanner) {
         Ticket object = new TicketBuilder(scanner[0]).buildObject();
+        object.setCreationUser(serverManager.getUser());
+        object.getEvent().setCreationUser(serverManager.getUser());
         AddRequest request = new AddRequest(object);
         AddResponse response = (AddResponse) serverManager.sendRequestGetResponse(request, true);
         if (response.getResult()) {

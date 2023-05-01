@@ -15,12 +15,12 @@ import java.util.Vector;
  * Class for manipulating the main collection of objects
  */
 public class CollectionManager {
-    private Vector<Ticket> collection = new Vector<>();
+    private List<Ticket> collection = Collections.synchronizedList(new Vector<>());
     private final Date initializationDate;
     private static CollectionManager instance = null;
     private CollectionManager() {
         initializationDate = new Date();
-    };
+    }
     public static CollectionManager getInstance() {
         if (instance == null) {
             instance = new CollectionManager();
@@ -38,7 +38,7 @@ public class CollectionManager {
     /**
      * @return collection
      */
-    public Vector<Ticket> getCollection() {
+    public List<Ticket> getCollection() {
         return collection;
     }
 

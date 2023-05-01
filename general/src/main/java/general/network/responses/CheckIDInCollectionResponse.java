@@ -8,4 +8,7 @@ public class CheckIDInCollectionResponse extends Response implements Serializabl
     public CheckIDInCollectionResponse(Boolean result) {
         super(result);
     }
+    public CheckIDInCollectionResponse(Boolean result, String message) {
+        super(result, message);
+    }
 }

@@ -21,7 +21,6 @@ public class AddIfMinCommand implements Executable {
         try {
             element = collectionManager.getMinElement();
         } catch (EmptyCollectionException e) {
-            System.out.println(e.getMessage());
             return new AddIfMinResponse(false, false);
         }
 

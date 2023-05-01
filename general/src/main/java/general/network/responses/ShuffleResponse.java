@@ -8,4 +8,7 @@ public class ShuffleResponse extends Response implements Serializable {
     public ShuffleResponse(Boolean result) {
         super(result);
     }
+    public ShuffleResponse(Boolean result, String message) {
+        super(result, message);
+    }
 }

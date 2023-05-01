@@ -5,10 +5,15 @@ import general.network.Response;
 import java.io.Serializable;
 
 public class RemoveByIDResponse extends Response implements Serializable {
-    private Boolean resultChecking;
+    private final Boolean resultChecking;
 
     public RemoveByIDResponse(Boolean result, Boolean resultChecking) {
         super(result);
+        this.resultChecking = resultChecking;
+    }
+
+    public RemoveByIDResponse(Boolean result, Boolean resultChecking, String message) {
+        super(result, message);
         this.resultChecking = resultChecking;
     }
 

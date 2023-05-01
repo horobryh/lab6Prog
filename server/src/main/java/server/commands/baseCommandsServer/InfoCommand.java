@@ -8,8 +8,7 @@ import server.commands.Executable;
 import general.models.Ticket;
 
 import java.util.Date;
-import java.util.Scanner;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Command class for printing full information about an existing collection
@@ -18,7 +17,7 @@ public class InfoCommand implements Executable {
     private final CollectionManager collectionManager;
     @Override
     public Response execute(Request request) {
-        Vector<Ticket> collectionElements = collectionManager.getCollection();
+        List<Ticket> collectionElements = collectionManager.getCollection();
         Date initializationDate = collectionManager.getInitializationDate();
         return new InfoResponse(true, collectionElements.stream().toList(), initializationDate);
     }

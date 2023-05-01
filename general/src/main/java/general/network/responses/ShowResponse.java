@@ -8,6 +8,10 @@ import java.util.List;
 
 public class ShowResponse extends Response implements Serializable {
     private final List<Ticket> resultList;
+    public ShowResponse(Boolean result, List<Ticket> resultList, String message) {
+        super(result, message);
+        this.resultList = resultList;
+    }
     public ShowResponse(Boolean result, List<Ticket> resultList) {
         super(result);
         this.resultList = resultList;

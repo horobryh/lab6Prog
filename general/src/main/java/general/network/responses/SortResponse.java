@@ -13,6 +13,11 @@ public class SortResponse extends Response implements Serializable {
         this.resultList = resultList;
     }
 
+    public SortResponse(Boolean result, List<Ticket> resultList, String message) {
+        super(result, message);
+        this.resultList = resultList;
+    }
+
     public List<Ticket> getResultList() {
         return resultList;
     }

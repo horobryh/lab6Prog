@@ -32,7 +32,11 @@ public class UpdateCommand implements Executable {
         CheckIDInCollectionRequest requestID = new CheckIDInCollectionRequest(id);
         CheckIDInCollectionResponse responseID = (CheckIDInCollectionResponse) serverManager.sendRequestGetResponse(requestID, true);
         if (!responseID.getResult()) {
-            System.out.println("Такого ID нет в коллекции");
+            if (responseID.getMessage().equals("")) {
+                System.out.println("Произошла ошибка...");
+            } else {
+                System.out.println(responseID.getMessage());
+            }
             return;
         }
 
@@ -42,9 +46,12 @@ public class UpdateCommand implements Executable {
         if (response.getResult()) {
             System.out.println("Элемент успешно обновлен");
         } else {
-            System.out.println("Произошла ошибка при изменении объекта");
+            if (response.getMessage().equals("")) {
+                System.out.println("Произошла ошибка при изменении объекта. Вероятнее всего, вы не являетесь его владельцем.");
+            } else {
+                System.out.println(response.getMessage());
+            }
         }
-
     }
 
     @Override

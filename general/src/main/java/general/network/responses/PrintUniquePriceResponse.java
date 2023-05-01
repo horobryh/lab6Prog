@@ -13,6 +13,11 @@ public class PrintUniquePriceResponse extends Response implements Serializable {
         this.resultList = resultList;
     }
 
+    public PrintUniquePriceResponse(Boolean result, List<Integer> resultList, String message) {
+        super(result, message);
+        this.resultList = resultList;
+    }
+
     public List<Integer> getResultList() {
         return resultList;
     }
