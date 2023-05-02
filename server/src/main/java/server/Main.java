@@ -11,6 +11,7 @@ import server.commands.CommandRegister;
 import server.network.RequestManager;
 import server.network.Server;
 
+import javax.naming.NamingException;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
@@ -45,7 +46,7 @@ public class Main {
         try {
             String startingPort = new Scanner(System.in).nextLine();
             server = new Server(Integer.parseInt(startingPort), commandManager, logger, "jdbc:postgresql://localhost:5432/studs", login, password);
-        } catch (SQLException e) {
+        } catch (SQLException | NamingException e) {
             logger.error("Произошла ошибка соединения с базой данных " + e);
             exit(0);
         } catch (IllegalArgumentException e) {

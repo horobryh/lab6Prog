@@ -52,7 +52,8 @@ public class TicketBuilder implements Builderable<Ticket> {
                 Integer.parseInt(obj);
                 check = true;
             } catch (NumberFormatException e) {
-                System.out.println(e + "Введенный аргумент не число.");
+                System.out.println(e + " Введенный аргумент не число.");
+                continue;
             }
             checkCond = Ticket.checkAllConditionsByKey(obj, "price");
         } while (!check || !checkCond);
@@ -72,6 +73,7 @@ public class TicketBuilder implements Builderable<Ticket> {
                 check = true;
             } catch (NumberFormatException e) {
                 System.out.println(e + "Введенный аргумент не число.");
+                continue;
             }
             checkCond = Ticket.checkAllConditionsByKey(obj, "discount");
         } while (!check || !checkCond);

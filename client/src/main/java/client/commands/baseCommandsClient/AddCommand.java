@@ -14,6 +14,7 @@ import java.util.Scanner;
  */
 public class AddCommand implements Executable {
     private final ServerManager serverManager;
+
     public AddCommand(ServerManager serverManager) {
         this.serverManager = serverManager;
     }
@@ -21,6 +22,7 @@ public class AddCommand implements Executable {
     @Override
     public void execute(String[] args, Scanner... scanner) {
         Ticket object = new TicketBuilder(scanner[0]).buildObject();
+
         object.setCreationUser(serverManager.getUser());
         object.getEvent().setCreationUser(serverManager.getUser());
         AddRequest request = new AddRequest(object);
@@ -28,7 +30,13 @@ public class AddCommand implements Executable {
         if (response.getResult()) {
             System.out.println("Добавление прошло успешно.");
         } else {
-            System.out.println("Произошла ошибка при удалении объекта.");
+            if (response.getMessage().equals("")) {
+                System.out.println("Произошла ошибка при добавлении объекта.");
+            } else {
+                System.out.println(response.getMessage());
+            }
+
+
         }
     }
 

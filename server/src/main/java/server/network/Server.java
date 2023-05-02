@@ -16,6 +16,8 @@ import java.util.concurrent.*;
 import org.apache.logging.log4j.Logger;
 import server.database.DataBaseManager;
 
+import javax.naming.NamingException;
+
 public class Server {
     private final Logger logger;
     private Integer port;
@@ -24,7 +26,7 @@ public class Server {
     private final Scanner scanner;
     private DataBaseManager dataBaseManager;
 
-    public Server(Integer port, CommandManager commandManager, Logger logger, String dataBaseUrl, String dataBaselogin, String dataBasePassword) throws SQLException {
+    public Server(Integer port, CommandManager commandManager, Logger logger, String dataBaseUrl, String dataBaselogin, String dataBasePassword) throws SQLException, NamingException {
         this.port = port;
         this.commandManager = commandManager;
         this.logger = logger;
@@ -38,7 +40,7 @@ public class Server {
         while (true) {
             try {
                 this.serverSocket = new ServerSocket(this.port);
-                this.serverSocket.setSoTimeout(1000);
+//                this.serverSocket.setSoTimeout(1000);
                 logger.info("Сервер запущен на порте " + port);
                 return;
             } catch (BindException e) {
@@ -121,20 +123,20 @@ public class Server {
                     }
                     Thread.currentThread().interrupt();
                 }).start();
-            } catch (SocketTimeoutException e) {
-                try {
-                    String command;
-                    if (System.in.available() > 0 && scanner.hasNextLine()) {
-                        command = scanner.nextLine();
-                    } else {
-                        continue;
-                    }
-                    if (command.equals("save")) {
-                        commandManager.getCommands().get("save").execute(new Request() {
-                        });
-                    }
-                } catch (IOException ignored) {
-                }
+//            } catch (SocketTimeoutException e) {
+//                try {
+//                    String command;
+//                    if (System.in.available() > 0 && scanner.hasNextLine()) {
+//                        command = scanner.nextLine();
+//                    } else {
+//                        continue;
+//                    }
+//                    if (command.equals("save")) {
+//                        commandManager.getCommands().get("save").execute(new Request() {
+//                        });
+//                    }
+//                } catch (IOException ignored) {
+//                }
             } catch (IOException e) {
                 logger.error(e);
             }

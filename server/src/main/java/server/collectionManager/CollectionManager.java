@@ -90,13 +90,10 @@ public class CollectionManager {
      * @throws IDNotFoundException There is no object with this ID in the collection
      * @throws EmptyCollectionException Collection is empty
      */
-    public Ticket getElementByID(Integer id) throws IDNotFoundException, EmptyCollectionException {
-        if (!Ticket.checkIDInUsed(id)) {
-            throw new IDNotFoundException("ID не найден в коллекции");
-        }
+    public Ticket getElementByID(Integer id) throws EmptyCollectionException {
         List<Ticket> element = collection.stream().filter(x -> x.getId() == id).toList();
         if (element.isEmpty()) {
-            throw new EmptyCollectionException("Коллекция пуста.");
+            throw new EmptyCollectionException("Элемент не найден в коллекции");
         }
         return element.get(0);
     }

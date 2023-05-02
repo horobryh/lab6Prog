@@ -27,10 +27,9 @@ public class UpdateCommand implements Executable {
 
         Integer id = ((UpdateRequest) request).getId();
         Ticket elementForUpdating;
-        // TODO: добавить в response message ошибки
         try {
             elementForUpdating = collectionManager.getElementByID(id);
-        } catch (IDNotFoundException | EmptyCollectionException e) {
+        } catch (EmptyCollectionException e) {
             return new UpdateResponse(false, "Произошла ошибка " + e);
 
         }

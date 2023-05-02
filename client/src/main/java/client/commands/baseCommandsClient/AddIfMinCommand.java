@@ -17,6 +17,8 @@ public class AddIfMinCommand implements Executable {
     @Override
     public void execute(String[] args, Scanner... scanners) {
         Ticket newTicket = new TicketBuilder(scanners[0]).buildObject();
+        newTicket.setCreationUser(serverManager.getUser());
+        newTicket.getEvent().setCreationUser(serverManager.getUser());
         AddIfMinRequest request = new AddIfMinRequest(newTicket);
         AddIfMinResponse response = (AddIfMinResponse) serverManager.sendRequestGetResponse(request, true);
 

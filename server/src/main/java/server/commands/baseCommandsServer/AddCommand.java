@@ -28,7 +28,6 @@ public class AddCommand implements Executable {
     @Override
     public Response execute(Request request) {
         Ticket ticket = ((AddRequest) request).getTicket();
-        ticket.setId(ticket.getNextID());
         try {
             Event event = server.getDataBaseManager().addEvent(ticket.getEvent());
             ticket = server.getDataBaseManager().addTicket(ticket, event);
