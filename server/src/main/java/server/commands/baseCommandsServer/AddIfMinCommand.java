@@ -9,12 +9,14 @@ import server.commands.Executable;
 import general.models.Ticket;
 import general.models.comparators.TicketNameComparator;
 import general.validators.exceptions.EmptyCollectionException;
+import server.network.Server;
 
 /**
  * Command class that adds an element to the collection if it is less than the minimum
  */
 public class AddIfMinCommand implements Executable {
     private final CollectionManager collectionManager;
+    private Server server;
     @Override
     public Response execute(Request request) {
         Ticket element;
@@ -27,8 +29,9 @@ public class AddIfMinCommand implements Executable {
         Ticket newTicket = ((AddIfMinRequest) request).getTicket();
         newTicket.setId(newTicket.getNextID());
         if (new TicketNameComparator().compare(element, newTicket) < 0) {
-            collectionManager.add(newTicket);
-            return new AddIfMinResponse(true, true);
+            AddCommand addCommand = new AddCommand(collectionManager, server);
+            Response response = addCommand.execute(request);
+            return new AddIfMinResponse(response.getResult(), true, response.getMessage());
         } else {
             return new AddIfMinResponse(true, false);
         }
@@ -49,7 +52,8 @@ public class AddIfMinCommand implements Executable {
         return "добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции";
     }
 
-    public AddIfMinCommand(CollectionManager collectionManager) {
+    public AddIfMinCommand(CollectionManager collectionManager, Server server) {
         this.collectionManager = collectionManager;
+        this.server = server;
     }
 }

@@ -198,4 +198,17 @@ public class DataBaseManager {
 
         return preparedStatement.executeQuery();
     }
+
+    public int clear() throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM \"PTickets\", \"PEvents\"");
+
+        return preparedStatement.executeUpdate();
+    }
+
+    public int removeByID(Integer id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM \"PTickets\" WHERE id = ?");
+        preparedStatement.setInt(1, id);
+
+        return preparedStatement.executeUpdate();
+    }
 }

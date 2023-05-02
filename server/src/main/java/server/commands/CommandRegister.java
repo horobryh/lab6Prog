@@ -25,14 +25,14 @@ public class CommandRegister {
         commandManager.regNewCommand("add", new AddCommand(collectionManager, server));
         commandManager.regNewCommand("help", new HelpCommand(commandManager));
         commandManager.regNewCommand("info", new InfoCommand(collectionManager));
-        commandManager.regNewCommand("remove_by_id", new RemoveByIDCommand(collectionManager));
-        commandManager.regNewCommand("clear", new ClearCommand(collectionManager));
+        commandManager.regNewCommand("remove_by_id", new RemoveByIDCommand(collectionManager, server));
+        commandManager.regNewCommand("clear", new ClearCommand(collectionManager, server));
         commandManager.regNewCommand("exit", new ExitCommand());
         commandManager.regNewCommand("count_less_than_discount", new CountLessThanDiscountCommand(collectionManager));
         commandManager.regNewCommand("shuffle", new ShuffleCommand(collectionManager));
         commandManager.regNewCommand("print_unique_price", new PrintUniquePrice(collectionManager));
         commandManager.regNewCommand("print_field_ascending_discount", new PrintFieldAscendingDiscountCommand(collectionManager));
-        commandManager.regNewCommand("add_if_min", new AddIfMinCommand(collectionManager));
+        commandManager.regNewCommand("add_if_min", new AddIfMinCommand(collectionManager, server));
         commandManager.regNewCommand("update", new UpdateCommand(collectionManager, server));
         commandManager.regNewCommand("sort", new SortCommand(collectionManager));
         commandManager.regNewCommand("show", new ShowCommand(collectionManager));

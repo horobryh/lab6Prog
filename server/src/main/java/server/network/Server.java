@@ -114,29 +114,15 @@ public class Server {
                             responseRecursiveTask.fork();
                             Response serverResponse = responseRecursiveTask.join();
                             if (serverResponse != null) {
-                                ExecutorService executorService = Executors.newFixedThreadPool(10);
+                                ExecutorService executorService = Executors.newFixedThreadPool(5);
                                 executorService.submit(() -> sendResponse(clientSocket, serverResponse));
-                                executorService.shutdownNow();
+                                executorService.shutdown();
                             }
                             responseRecursiveTask.cancel(true);
                         }
                     }
                     Thread.currentThread().interrupt();
                 }).start();
-//            } catch (SocketTimeoutException e) {
-//                try {
-//                    String command;
-//                    if (System.in.available() > 0 && scanner.hasNextLine()) {
-//                        command = scanner.nextLine();
-//                    } else {
-//                        continue;
-//                    }
-//                    if (command.equals("save")) {
-//                        commandManager.getCommands().get("save").execute(new Request() {
-//                        });
-//                    }
-//                } catch (IOException ignored) {
-//                }
             } catch (IOException e) {
                 logger.error(e);
             }
