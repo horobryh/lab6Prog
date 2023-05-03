@@ -73,7 +73,7 @@ public class Main {
 
         commandRegister.registerCommands(commandManager, collectionManager, server);
 
-        server.run2_0();
+        server.run();
 
     }
 }

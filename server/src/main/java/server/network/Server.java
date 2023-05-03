@@ -8,8 +8,8 @@ import java.io.*;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.concurrent.*;
 
@@ -95,35 +95,62 @@ public class Server {
         }
     }
 
-    public void run2_0() {
+    public void run() {
+        ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
         while (true) {
             try {
                 Socket clientSocket = getNewConnection();
-                new Thread(() -> {
-                    if (clientSocket == null) Thread.currentThread().interrupt();
-                    if (!Thread.currentThread().isInterrupted()) {
-                        Request clientRequest = readRequest(clientSocket);
-                        if (clientRequest == null) Thread.currentThread().interrupt();
-                        if (!Thread.currentThread().isInterrupted()) {
-                            RecursiveTask<Response> responseRecursiveTask = new RecursiveTask<>() {
-                                @Override
-                                protected Response compute() {
-                                    return commandProcessing(clientRequest);
-                                }
-                            };
-                            responseRecursiveTask.fork();
-                            Response serverResponse = responseRecursiveTask.join();
-                            if (serverResponse != null) {
-                                ExecutorService executorService = Executors.newFixedThreadPool(5);
-                                executorService.submit(() -> sendResponse(clientSocket, serverResponse));
-                                executorService.shutdown();
-                            }
-                            responseRecursiveTask.cancel(true);
-                        }
+                // Чтение запроса
+                if (clientSocket == null) continue;
+                FutureTask<Request> socketFuture = new FutureTask<>(() -> readRequest(clientSocket));
+                Thread thread = new Thread(socketFuture);
+                thread.start();
+                Request clientRequest = socketFuture.get();
+                thread.interrupt();
+
+                // Выполнение запроса
+                if (clientRequest == null) continue;
+                RecursiveTask<Response> responseRecursiveTask = new RecursiveTask<>() {
+                    @Override
+                    protected Response compute() {
+                        return commandProcessing(clientRequest);
                     }
-                    Thread.currentThread().interrupt();
-                }).start();
-            } catch (IOException e) {
+                };
+                responseRecursiveTask.fork();
+                Response serverResponse = forkJoinPool.invoke(responseRecursiveTask);
+                responseRecursiveTask.cancel(false);
+
+                // Отправка ответа
+                if (serverResponse == null) continue;
+                executorService.submit(() -> sendResponse(clientSocket, serverResponse));
+
+
+//                new Thread(() -> {
+//                    if (clientSocket == null) Thread.currentThread().interrupt();
+//                    if (!Thread.currentThread().isInterrupted()) {
+//                        Request clientRequest = readRequest(clientSocket);
+//                        if (clientRequest == null) Thread.currentThread().interrupt();
+//                        if (!Thread.currentThread().isInterrupted()) {
+//                            RecursiveTask<Response> responseRecursiveTask = new RecursiveTask<>() {
+//                                @Override
+//                                protected Response compute() {
+//                                    return commandProcessing(clientRequest);
+//                                }
+//                            };
+//                            responseRecursiveTask.fork();
+//                            Response serverResponse = responseRecursiveTask.join();
+//                            if (serverResponse != null) {
+//                                ExecutorService executorService = Executors.newFixedThreadPool(5);
+//                                executorService.submit(() -> sendResponse(clientSocket, serverResponse));
+//                                executorService.shutdown();
+//                            }
+//                            responseRecursiveTask.cancel(true);
+//                        }
+//                    }
+//                    Thread.currentThread().interrupt();
+//                }).start();
+            } catch (IOException | ExecutionException | InterruptedException e) {
                 logger.error(e);
             }
         }

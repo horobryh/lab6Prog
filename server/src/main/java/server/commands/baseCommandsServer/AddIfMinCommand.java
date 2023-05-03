@@ -3,6 +3,7 @@ package server.commands.baseCommandsServer;
 import general.network.Request;
 import general.network.Response;
 import general.network.requests.AddIfMinRequest;
+import general.network.requests.AddRequest;
 import general.network.responses.AddIfMinResponse;
 import server.collectionManager.CollectionManager;
 import server.commands.Executable;
@@ -30,7 +31,7 @@ public class AddIfMinCommand implements Executable {
         newTicket.setId(newTicket.getNextID());
         if (new TicketNameComparator().compare(element, newTicket) < 0) {
             AddCommand addCommand = new AddCommand(collectionManager, server);
-            Response response = addCommand.execute(request);
+            Response response = addCommand.execute(new AddRequest(((AddIfMinRequest) request).getTicket()));
             return new AddIfMinResponse(response.getResult(), true, response.getMessage());
         } else {
             return new AddIfMinResponse(true, false);
