@@ -1,80 +1,110 @@
 package client;
 
-import client.commands.CommandManager;
-import client.commands.CommandRegister;
-import client.commands.baseCommandsClient.AuthCommand;
-import client.scannerManager.ScannerManager;
-import client.serverManager.ServerManager;
-import general.models.User;
+import client.gui.AuthController;
+import client.builders.FirstStartBuilder;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
+import jfxtras.styles.jmetro.Style;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.net.URL;
 
-public class Main {
+import static java.lang.System.exit;
+
+public class Main extends Application {
+    private static final FirstStartBuilder firstStartBuilder = new FirstStartBuilder();
+    private static URL xmlUrlAuth = Main.class.getResource("/authWindow.fxml");
+    private static URL xmlUrlMain = Main.class.getResource("/mainWindow.fxml");
+    private static URL xmlUrlEdit = Main.class.getResource("/editTicketWindow.fxml");
+
     public static void main(String[] args) {
-        ServerManager serverManager = null;
-        Scanner scanner = new Scanner(System.in);
-        String obj = null;
-        Integer port;
-        do {
-            System.out.print("Введите порт: ");
-            try {
-                obj = scanner.nextLine();
-            } catch (NoSuchElementException e) {
-                System.out.println("Введен символ завершения ввода. Выполнение программы завершено.");
-                System.exit(0);
-            }
+        launch(args);
+        exit(0);
 
-            try {
-                port = Integer.parseInt(obj);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println(e + "Введенный аргумент не число.");
-            }
-
-        } while (true);
-        try {
-            serverManager = ServerManager.getInstance(InetAddress.getLocalHost(), port);
-            Socket socket = new Socket(InetAddress.getLocalHost(), port);
-            socket.close();
-            System.out.println("Сервер подключен.");
-        } catch (IOException | IllegalArgumentException e) {
-            System.out.println("Произошла ошибка подключения ServerManager " + e);
-            System.out.println("Завершение программы...");
-            System.exit(0);
-        }
-        CommandManager commandManager = CommandManager.getInstance();
-        CommandRegister commandRegister = CommandRegister.getInstance();
-
-        commandRegister.registerCommands(commandManager, serverManager);
-
-        User user = authorization(serverManager);
-
-        serverManager.addUser(user);
-
-        InputStream inputStream = System.in;
-
-        ScannerManager scannerManager = new ScannerManager(inputStream, commandManager, true);
-        try {
-            scannerManager.startScan();
-        } catch (NullPointerException e) {
-            System.out.println("Произошла ошибка, сервер недоступен " + e);
-            commandManager.getCommands().get("exit").execute(new String[1]);
-        }
+//        new Thread(() -> launch(args)).start();
+//        ServerManager serverManager = null;
+//        Scanner scanner = new Scanner(System.in);
+//        String obj = null;
+//        Integer port;
+//        do {
+//            try {
+//                port = authController.portSpinner.getValue();
+//                if (port != null) break;
+//            } catch (NumberFormatException e) {
+//                System.out.println(e + "Введенный аргумент не число.");
+//            } catch (NullPointerException e) {
+//                System.out.println(new Date());
+//            }
+//
+//        } while (true);
+//        try {
+//            serverManager = ServerManager.getInstance(InetAddress.getLocalHost(), port);
+//            Socket socket = new Socket(InetAddress.getLocalHost(), port);
+//            socket.close();
+//            System.out.println("Сервер подключен.");
+//        } catch (IOException | IllegalArgumentException e) {
+//            System.out.println("Произошла ошибка подключения ServerManager " + e);
+//            System.out.println("Завершение программы...");
+//            System.exit(0);
+//        }
+//        CommandManager commandManager = CommandManager.getInstance();
+//        CommandRegister commandRegister = CommandRegister.getInstance();
+//
+//        commandRegister.registerCommands(commandManager, serverManager);
+//
+//        User user = authorization(serverManager);
+//
+//        serverManager.addUser(user);
+//
+//        InputStream inputStream = System.in;
+//
+//        ScannerManager scannerManager = new ScannerManager(inputStream, commandManager, true);
+//        try {
+//            scannerManager.startScan();
+//        } catch (NullPointerException e) {
+//            System.out.println("Произошла ошибка, сервер недоступен " + e);
+//            commandManager.getCommands().get("exit").execute(new String[1]);
+//        }
     }
 
-    private static User authorization(ServerManager serverManager) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Авторизация. Если вы еще не зарегистрированы в системе, придумайте ваши логин и пароль.");
-        System.out.print("Введите логин:\t");
-        String login = scanner.nextLine();
-        System.out.print("Введите пароль:\t");
-        String password = scanner.nextLine();
+//    private static User authorization(ServerManager serverManager) {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Авторизация. Если вы еще не зарегистрированы в системе, придумайте ваши логин и пароль.");
+//        System.out.print("Введите логин:\t");
+//        String login = scanner.nextLine();
+//        System.out.print("Введите пароль:\t");
+//        String password = scanner.nextLine();
+//
+//        return new AuthCommand(serverManager).getUser(login, password);
+//    }
 
-        return new AuthCommand(serverManager).getUser(login, password);
+    @Override
+    public void start(Stage stage) throws Exception {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(xmlUrlAuth);
+        AuthController authController = new AuthController(firstStartBuilder, xmlUrlMain, xmlUrlEdit, stage);
+        loader.setController(authController);
+
+        Parent root = loader.load();
+
+        JMetro jMetro = new JMetro(Style.DARK);
+        Scene scene = new Scene(root);
+        jMetro.setScene(scene);
+        BorderPane borderPane = (BorderPane) loader.getNamespace().get("backgroundBorderPane");
+        borderPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+        stage.setScene(scene);
+        stage.setTitle("Авторизация");
+        stage.show();
+    }
+
+    private void showErrorDialog(Thread t, Throwable e) {
+        e.printStackTrace();
     }
 }

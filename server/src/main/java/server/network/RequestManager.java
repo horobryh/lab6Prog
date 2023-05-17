@@ -27,6 +27,7 @@ public class RequestManager {
         requestToCommandKey.put(CountLessThanDiscountRequest.class, "count_less_than_discount");
         requestToCommandKey.put(InfoRequest.class, "info");
         requestToCommandKey.put(PrintFieldAscendingDiscountRequest.class, "print_field_ascending_discount");
+        requestToCommandKey.put(PrintUniquePriceRequest.class, "print_unique_price");
         requestToCommandKey.put(RemoveByIDRequest.class, "remove_by_id");
         requestToCommandKey.put(ShowRequest.class, "show");
         requestToCommandKey.put(ShuffleRequest.class, "shuffle");

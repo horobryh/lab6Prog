@@ -6,6 +6,7 @@ import general.validators.baseValidators.NotBlank;
 import general.validators.baseValidators.NotNull;
 import general.validators.baseValidators.SizeNumber;
 import general.validators.exceptions.WrongIDException;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Set;
 /**
  * Event model class
  */
+@EqualsAndHashCode
 public class Event extends BaseModelWithValidators implements AutomaticID<Long>, Serializable {
     private static Long lastID = 1L;
     private static Set<Long> usedID = new HashSet<>();
@@ -160,5 +162,9 @@ public class Event extends BaseModelWithValidators implements AutomaticID<Long>,
 
     public User getCreationUser() {
         return this.creationUser;
+    }
+
+    public Integer getCreationUserID() {
+        return creationUser.getId();
     }
 }

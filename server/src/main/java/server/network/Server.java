@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.Logger;
 import server.database.DataBaseManager;
@@ -117,14 +118,12 @@ public class Server {
                         return commandProcessing(clientRequest);
                     }
                 };
-                responseRecursiveTask.fork();
                 Response serverResponse = forkJoinPool.invoke(responseRecursiveTask);
                 responseRecursiveTask.cancel(false);
 
                 // Отправка ответа
                 if (serverResponse == null) continue;
                 executorService.submit(() -> sendResponse(clientSocket, serverResponse));
-
 
 //                new Thread(() -> {
 //                    if (clientSocket == null) Thread.currentThread().interrupt();

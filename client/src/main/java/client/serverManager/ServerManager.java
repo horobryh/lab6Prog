@@ -42,6 +42,8 @@ public class ServerManager {
             socketChannel.write(buffer);
         } catch (IOException e) {
             System.out.println("Произошла ошибка отправки Request " + e);
+        } catch (NullPointerException e) {
+            System.out.println("Произошла ошибка " + e);
         }
 
         if (responseNeeding) {
@@ -83,8 +85,8 @@ public class ServerManager {
             return socketChannel;
 
         } catch (IOException e) {
-            System.out.println("Произошла ошибка получения socketChannel");
-            return null;
+            System.out.println("Произошла ошибка получения socketChannel " + e);
+            return getNewSocketChannel();
         }
     }
 

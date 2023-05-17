@@ -8,6 +8,8 @@ import general.validators.baseValidators.NotNull;
 import general.validators.baseValidators.SizeNumber;
 import general.validators.baseValidators.SizeString;
 import general.validators.exceptions.NullException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +20,7 @@ import java.util.Set;
 /**
  * Ticket model class
  */
+@EqualsAndHashCode
 public class Ticket extends BaseModelWithValidators implements Serializable, AutomaticID<Integer>, Comparable<Ticket> {
     private static Integer lastID = 0;
     private User creationUser;
@@ -230,5 +233,17 @@ public class Ticket extends BaseModelWithValidators implements Serializable, Aut
 
     public User getCreationUser() {
         return this.creationUser;
+    }
+
+    public Integer getCreationUserID() {
+        return creationUser.getId();
+    }
+
+    public Integer getX() {
+        return coordinates.getX();
+    }
+
+    public Float getY() {
+        return coordinates.getY();
     }
 }

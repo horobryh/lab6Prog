@@ -6,6 +6,7 @@ import java.io.Serializable;
 /**
  * EventType model class
  */
+
 public enum EventType implements Serializable {
     E_SPORTS,
     FOOTBALL,

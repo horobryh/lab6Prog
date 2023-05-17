@@ -6,9 +6,8 @@ import general.models.User;
 import general.network.requests.AuthRequest;
 import general.network.responses.AuthResponse;
 
+import java.util.ArrayList;
 import java.util.Scanner;
-
-import static java.lang.System.exit;
 
 public class AuthCommand implements Executable {
     private final ServerManager serverManager;
@@ -36,23 +35,27 @@ public class AuthCommand implements Executable {
         return null;
     }
 
-    public User getUser(String login, String password) {
+    public ArrayList getUser(String login, String password) {
         AuthRequest authRequest = new AuthRequest(new User(login, password));
         AuthResponse authResponse = (AuthResponse) serverManager.sendRequestGetResponse(authRequest, true);
+        String message;
         if (authResponse.getResult()) {
             if (authResponse.getMessage().equals("")) {
-                System.out.println("Авторизация прошла успешно.");
+                message = "Авторизация прошла успешно.";
             } else {
-                System.out.println(authResponse.getMessage());
+                message = authResponse.getMessage();
             }
         } else {
             if (authResponse.getMessage().equals("")) {
-                System.out.println("Произошла ошибка авторизации. Завершение работы.");
+                message = "Произошла ошибка авторизации. Завершение работы.";
             } else {
-                System.out.println(authResponse.getMessage());
+                message = authResponse.getMessage();
             }
-            exit(0);
         }
-        return authResponse.getUser();
+        ArrayList<Object> res = new ArrayList<>();
+        res.add(authResponse.getUser());
+        res.add(message);
+        res.add(authResponse.getResult());
+        return res;
     }
 }

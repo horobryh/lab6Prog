@@ -152,7 +152,6 @@ public class DataBaseManager {
                 throw new SQLException("При получении ID произошла ошибка");
             }
         }
-
 //        connection.close();
         return ticket;
     }
@@ -200,7 +199,7 @@ public class DataBaseManager {
     }
 
     public int clear() throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM \"PTickets\", \"PEvents\"");
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM \"PTickets\"; DELETE FROM \"PEvents\"");
 
         return preparedStatement.executeUpdate();
     }

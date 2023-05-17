@@ -3,7 +3,6 @@ package server;
 import general.validators.exceptions.NullException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-//import server.builders.FirstStartBuilderFromDB;
 import server.builders.FirstStartBuilderFromDB;
 import server.collectionManager.CollectionManager;
 import server.commands.CommandManager;
