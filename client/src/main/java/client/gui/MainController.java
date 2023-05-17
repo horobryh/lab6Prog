@@ -2,7 +2,6 @@ package client.gui;
 
 import client.commands.CommandManager;
 import client.commands.Executable;
-import client.commands.baseCommandsClient.InfoCommand;
 import client.serverManager.ServerManager;
 import general.models.Ticket;
 import general.network.requests.*;
