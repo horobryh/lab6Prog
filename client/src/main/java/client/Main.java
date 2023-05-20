@@ -2,6 +2,8 @@ package client;
 
 import client.gui.AuthController;
 import client.builders.FirstStartBuilder;
+import client.gui.LocaleManager;
+import clojure.lang.IFn;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 
 import java.net.URL;
+import java.util.ResourceBundle;
 
 import static java.lang.System.exit;
 
@@ -22,6 +25,10 @@ public class Main extends Application {
     private static URL xmlUrlAuth = Main.class.getResource("/authWindow.fxml");
     private static URL xmlUrlMain = Main.class.getResource("/mainWindow.fxml");
     private static URL xmlUrlEdit = Main.class.getResource("/editTicketWindow.fxml");
+    private static ResourceBundle bundleRU = ResourceBundle.getBundle("languages");
+    private static ResourceBundle bundleEN = ResourceBundle.getBundle("languages_en");
+    private static ResourceBundle bundleDA = ResourceBundle.getBundle("languages_da");
+    private static ResourceBundle bundleTR = ResourceBundle.getBundle("languages_tr");
 
     public static void main(String[] args) {
         launch(args);
@@ -89,7 +96,8 @@ public class Main extends Application {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(xmlUrlAuth);
-        AuthController authController = new AuthController(firstStartBuilder, xmlUrlMain, xmlUrlEdit, stage);
+        LocaleManager localeManager = LocaleManager.getInstance(bundleRU, bundleEN, bundleDA, bundleTR);
+        AuthController authController = new AuthController(firstStartBuilder, xmlUrlMain, xmlUrlEdit, stage, localeManager);
         loader.setController(authController);
 
         Parent root = loader.load();

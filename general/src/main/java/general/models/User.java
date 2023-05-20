@@ -3,7 +3,6 @@ package general.models;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-
 @EqualsAndHashCode
 public class User implements Serializable {
     private Integer id = null;

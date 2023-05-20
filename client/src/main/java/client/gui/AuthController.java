@@ -3,6 +3,7 @@ package client.gui;
 import client.builders.FirstStartBuilder;
 import client.commands.CommandManager;
 import general.validators.exceptions.AuthorizationException;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,14 +23,52 @@ import static java.lang.System.exit;
 
 public class AuthController {
     private final FirstStartBuilder firstStartBuilder;
-    public HBox portBox;
-    public VBox authBox;
-    public Spinner<Integer> portSpinner;
-    public TextField loginTextField;
-    public PasswordField passwordPasswordField;
+    private final LocaleManager localeManager;
+    @FXML
+    private MenuItem englishLanguageMenuItem;
+
+    @FXML
+    private VBox authBox;
+
+    @FXML
+    private Button authButton;
+
+    @FXML
+    private Label authorizationHeaderLabel;
+
+    @FXML
+    private BorderPane backgroundBorderPane;
+
+    @FXML
+    private MenuItem denmarkLanguageMenuItem;
+
+    @FXML
+    private Menu languageMenu;
+
+    @FXML
+    private TextField loginTextField;
+
+    @FXML
+    private PasswordField passwordPasswordField;
+
+    @FXML
+    private Button portBindingButton;
+
+    @FXML
+    private HBox portBox;
+
+    @FXML
+    private Spinner<Integer> portSpinner;
+
+    @FXML
+    private MenuItem russianLanguageMenuItem;
+
+    @FXML
+    private MenuItem turkishLanguageMenuItem;
     private URL mainURL;
     private URL editURL;
     private Stage stage;
+
     public void authClicked() {
         try {
             String message = firstStartBuilder.authorization(loginTextField.getText(), passwordPasswordField.getText());
@@ -47,6 +86,7 @@ public class AuthController {
         try {
             setMainScene();
         } catch (IOException e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "Произошла непредвиденная ошибка: " + e, ButtonType.CLOSE);
             alert.showAndWait();
             exit(0);
@@ -72,13 +112,15 @@ public class AuthController {
 
     public void initialize() {
         portSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 65535, 1));
+        setMenuEvents();
     }
 
-    public AuthController(FirstStartBuilder firstStartBuilder, URL mainURL, URL editURL, Stage stage) {
+    public AuthController(FirstStartBuilder firstStartBuilder, URL mainURL, URL editURL, Stage stage, LocaleManager localeManager) {
         this.firstStartBuilder = firstStartBuilder;
         this.mainURL = mainURL;
         this.stage = stage;
         this.editURL = editURL;
+        this.localeManager = localeManager;
     }
 
     public void setMainScene() throws IOException {
@@ -94,5 +136,39 @@ public class AuthController {
         stage.setTitle("Основное окно");
         stage.setScene(jMetro.getScene());
         stage.show();
+    }
+
+    private void setMenuEvents() {
+        russianLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("ru");
+            changeLanguage();
+        });
+        englishLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("en");
+            changeLanguage();
+        });
+        denmarkLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("da");
+            changeLanguage();
+        });
+        turkishLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("tr");
+            changeLanguage();
+        });
+    }
+
+    public void changeLanguage() {
+        System.out.println("CHANGE!");
+        authorizationHeaderLabel.setText(localeManager.getName("auth.authorizationHeaderLabel"));
+        portBindingButton.setText(localeManager.getName("auth.portBindingButton"));
+        loginTextField.setPromptText(localeManager.getName("auth.loginTextField"));
+        passwordPasswordField.setPromptText(localeManager.getName("auth.passwordPasswordField"));
+        authButton.setText(localeManager.getName("auth.authButton"));
+
+        languageMenu.setText(localeManager.getName("auth.languageMenu"));
+        russianLanguageMenuItem.setText(localeManager.getName("auth.russianLanguageMenuItem"));
+        englishLanguageMenuItem.setText(localeManager.getName("auth.englishLanguageMenuItem"));
+        denmarkLanguageMenuItem.setText(localeManager.getName("auth.denmarkLanguageMenuItem"));
+        turkishLanguageMenuItem.setText(localeManager.getName("auth.turkishLanguageMenuItem"));
     }
 }

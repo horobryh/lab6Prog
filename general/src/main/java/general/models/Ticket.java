@@ -12,10 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Ticket model class
@@ -245,5 +242,56 @@ public class Ticket extends BaseModelWithValidators implements Serializable, Aut
 
     public Float getY() {
         return coordinates.getY();
+    }
+
+    public HashMap<String, String> getValuesForFiltering() {
+        Ticket ticket = this;
+        HashMap<String, String> result = new HashMap<>();
+        result.put("ticketID", String.valueOf(ticket.getId()));
+        result.put("ticketName", ticket.getName());
+        try {
+            result.put("ticketX", String.valueOf(ticket.getX()));
+        } catch (NullPointerException e) {
+            result.put("ticketX", "");
+        }
+        try {
+            result.put("ticketY", String.valueOf(ticket.getY()));
+        } catch (NullPointerException e) {
+            result.put("ticketY", "");
+        }
+        result.put("ticketDate", String.valueOf(ticket.getCreationDate()));
+        result.put("ticketPrice", String.valueOf(ticket.getPrice()));
+        result.put("ticketDiscount", String.valueOf(ticket.getDiscount()));
+        result.put("ticketComment", String.valueOf(ticket.getComment()));
+        try {
+            result.put("ticketType", ticket.getType().name());
+        } catch (NullPointerException e) {
+            result.put("ticketType", "");
+        }
+        try {
+            result.put("ticketCreationUserLogin", ticket.getCreationUser().getLogin());
+        } catch (NullPointerException e) {
+            result.put("ticketCreationUserLogin", "");
+        }
+        try {
+            result.put("eventID", String.valueOf(ticket.getEvent().getId()));
+            result.put("eventName", ticket.getEvent().getName());
+            result.put("eventDate", String.valueOf(ticket.getEvent().getDate()));
+            result.put("eventMinAge", String.valueOf(ticket.getEvent().getMinAge()));
+            result.put("eventDescription", ticket.getEvent().getDescription());
+            result.put("eventType", ticket.getEvent().getEventType().name());
+            result.put("eventCreationUserLogin", ticket.getEvent().getCreationUser().getLogin());
+        } catch (NullPointerException e) {
+            result.put("eventID", "");
+            result.put("eventName", "");
+            result.put("eventDate", "");
+            result.put("eventMinAge", "");
+            result.put("eventDescription", "");
+            result.put("eventType", "");
+            result.put("eventCreationUserLogin", "");
+        }
+
+
+        return result;
     }
 }

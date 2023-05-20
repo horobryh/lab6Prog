@@ -42,6 +42,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -65,7 +67,7 @@
                <center>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="sortingByLabel" text="Сортировать по:">
+                        <Label fx:id="filteringByLabel" text="Фильтровать по:">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
@@ -76,7 +78,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="sortingFieldChoiceBox" prefWidth="150.0">
+                        <ChoiceBox fx:id="filteringColumnChoiceBox" prefWidth="150.0">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
@@ -86,7 +88,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="sortingValueTextField" prefHeight="14.0" prefWidth="161.0">
+                        <TextField fx:id="filteringValueTextField" prefHeight="14.0" prefWidth="161.0">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -157,25 +159,102 @@
             <menus>
               <Menu fx:id="commandsMenu" mnemonicParsing="false" text="Команды">
                 <items>
-                  <MenuItem fx:id="addTicketMenuItem" mnemonicParsing="false" text="Добавить новый билет" />
-                        <MenuItem fx:id="clearCollectionMenuItem" mnemonicParsing="false" text="Очистить коллекцию" />
-                        <MenuItem fx:id="countLessThanDiscountMenuItem" mnemonicParsing="false" text="Count less than discount" />
-                        <MenuItem fx:id="printFieldAscendingDiscountMenuItem" mnemonicParsing="false" text="Распечатать все значения discount" />
-                        <MenuItem fx:id="uniquePriceMenuItem" mnemonicParsing="false" text="Уникальные значения price" />
-                        <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" text="Информация о коллекции" />
+                  <MenuItem fx:id="addTicketMenuItem" mnemonicParsing="false" text="Добавить новый билет">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/clipboard_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="clearCollectionMenuItem" mnemonicParsing="false" text="Очистить коллекцию">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/caution_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="countLessThanDiscountMenuItem" mnemonicParsing="false" text="Посчитать билеты, скидка которых меньше, чем...">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/bargraph_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="printFieldAscendingDiscountMenuItem" mnemonicParsing="false" text="Распечатать все значения discount">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/book-open_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="uniquePriceMenuItem" mnemonicParsing="false" text="Уникальные значения price">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/linegraph_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" text="Информация о коллекции">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/streetsign_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                 </items>
               </Menu>
               <Menu fx:id="languageMenu" mnemonicParsing="false" text="Язык">
                 <items>
-                  <MenuItem fx:id="russianLanguageMenuItem" mnemonicParsing="false" text="Русский" />
-                  <MenuItem fx:id="turkishLanguageMenuItem" mnemonicParsing="false" text="Турецкий" />
-                  <MenuItem fx:id="DanishLanguageMenuItem" mnemonicParsing="false" text="Датский" />
-                  <MenuItem fx:id="EnglishLanguageMenuItem" mnemonicParsing="false" text="Английский" />
+                  <MenuItem fx:id="russianLanguageMenuItem" mnemonicParsing="false" text="Русский">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/languages/ru.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                  <MenuItem fx:id="turkishLanguageMenuItem" mnemonicParsing="false" text="Турецкий">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/languages/tr.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                  <MenuItem fx:id="DanishLanguageMenuItem" mnemonicParsing="false" text="Датский">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/languages/da.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                  <MenuItem fx:id="EnglishLanguageMenuItem" mnemonicParsing="false" text="Английский">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/languages/en.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                 </items>
               </Menu>
-              <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+              <Menu fx:id="helpMenu" mnemonicParsing="false" text="Справка">
                 <items>
-                  <MenuItem fx:id="infoAboutCommandsMenuItem" mnemonicParsing="false" text="Распечатать список команд" />
+                  <MenuItem fx:id="infoAboutCommandsMenuItem" mnemonicParsing="false" text="Распечатать список команд">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/global_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                 </items>
               </Menu>
             </menus>

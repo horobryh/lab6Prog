@@ -1,9 +1,11 @@
 package client.gui;
 
+import client.Main;
 import client.commands.CommandManager;
 import client.commands.Executable;
 import client.serverManager.ServerManager;
 import general.models.Ticket;
+import general.models.TicketType;
 import general.network.requests.*;
 import general.network.responses.*;
 import javafx.application.Platform;
@@ -19,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
@@ -28,11 +31,11 @@ import jfxtras.styles.jmetro.Style;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainController {
+    private HashMap<Integer, String> userToColorMap = new HashMap<>();
     @FXML
     private TableColumn<Ticket, String> eventCreationUserLogin;
 
@@ -42,7 +45,7 @@ public class MainController {
     @FXML
     private MenuItem uniquePriceMenuItem;
     @FXML
-    private TextField sortingValueTextField;
+    private TextField filteringValueTextField;
     @FXML
     private Label mainUserLoginLabel;
 
@@ -56,7 +59,7 @@ public class MainController {
     private MenuItem russianLanguageMenuItem;
 
     @FXML
-    private Label sortingByLabel;
+    private Label filteringByLabe;
 
     @FXML
     private Menu helpMenu;
@@ -143,6 +146,8 @@ public class MainController {
 
     @FXML
     private TableColumn<Ticket, Float> ticketY;
+    @FXML
+    private ChoiceBox<String> filteringColumnChoiceBox;
 
     private final ServerManager serverManager;
     private CommandManager commandManager;
@@ -159,6 +164,11 @@ public class MainController {
         setCellFactories();
         startLoadingThread();
         setMenuEvents();
+        ObservableList<String> observableListTicket = FXCollections.observableArrayList();
+        observableListTicket.addAll(new Ticket().getValuesForFiltering().keySet().stream().sorted().toList());
+
+        filteringColumnChoiceBox.setItems(observableListTicket);
+        filteringColumnChoiceBox.setValue("ticketID");
         try {
             loadEditController();
         } catch (IOException e) {
@@ -180,6 +190,13 @@ public class MainController {
         ShowResponse showResponse = (ShowResponse) serverManager.sendRequestGetResponse(showRequest, true);
 
         List<Ticket> coll = showResponse.getResultList();
+        for (Ticket ticket : coll) {
+            if (!userToColorMap.containsKey(ticket.getCreationUserID())) {
+
+                Double result = Math.random() * 16777216;
+                userToColorMap.put(ticket.getCreationUserID(), String.format("%06x", result.intValue()));
+            }
+        }
         HashSet<Ticket> resultAddingSet = new HashSet<>(oldCollection);
         resultAddingSet.addAll(coll);
         resultAddingSet.removeAll(oldCollection);
@@ -206,6 +223,17 @@ public class MainController {
     }
 
     private void setCellFactories() {
+        mainTableView.setRowFactory(ticketTableView -> new TableRow<Ticket>() {
+            @Override
+            protected void updateItem(Ticket ticket, boolean empty) {
+                super.updateItem(ticket, empty);
+                if (ticket == null) {
+                    setStyle("");
+                    return;
+                }
+                setStyle("-fx-background-color: #" + userToColorMap.getOrDefault(ticket.getCreationUserID(), "FFFFFF"));
+            }
+        });
         ticketID.setCellValueFactory(new PropertyValueFactory<>("id"));
         ticketName.setCellValueFactory(new PropertyValueFactory<>("name"));
         ticketX.setCellValueFactory(new PropertyValueFactory<>("x"));
@@ -234,11 +262,38 @@ public class MainController {
         uniquePriceMenuItem.setOnAction(actionEvent -> uniquePrice());
         infoMenuItem.setOnAction(actionEvent -> info());
         infoAboutCommandsMenuItem.setOnAction(actionEvent -> infoAboutCommands());
+        refreshTableButton.setOnAction(actionEvent -> filterTable());
+    }
+
+    private void filterTable() {
+        String column = filteringColumnChoiceBox.getValue();
+        String value = filteringValueTextField.getText();
+
+        ShowRequest showRequest = new ShowRequest();
+        ShowResponse showResponse = (ShowResponse) serverManager.sendRequestGetResponse(showRequest, true);
+
+        List<Ticket> collection = showResponse.getResultList();
+        if (value.isEmpty()) {
+            Platform.runLater(() -> {
+                mainTableView.setItems(FXCollections.observableArrayList(collection));
+                mainTableView.refresh();
+            });
+            return;
+        }
+        List<HashMap<String, String>> collectionForFiltering = collection.stream().map(Ticket::getValuesForFiltering).toList();
+        collectionForFiltering = collectionForFiltering.stream().filter(x -> x.get(column).equals(value)).toList();
+        List<String> collectionOfID = collectionForFiltering.stream().map(x -> x.get("ticketID")).toList();
+        List<Ticket> coll = collection.stream().filter(x -> collectionOfID.contains(String.valueOf(x.getId()))).toList();
+        Platform.runLater(() -> {
+            mainTableView.setItems(FXCollections.observableArrayList(coll));
+            mainTableView.refresh();
+            System.out.println("успешно");
+        });
     }
 
     private void infoAboutCommands() {
         StringBuilder result = new StringBuilder();
-        for (Executable command: commandManager.getCommands().values()) {
+        for (Executable command : commandManager.getCommands().values()) {
             result.append(command.getName()).append(" ").append(command.getArgs()).append("\t").append(command.getDescription()).append("\n");
         }
         Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
@@ -261,12 +316,13 @@ public class MainController {
             alert.show();
         }
     }
+
     private void uniquePrice() {
         PrintUniquePriceRequest printUniquePriceRequest = new PrintUniquePriceRequest();
         PrintUniquePriceResponse printUniquePriceResponse = (PrintUniquePriceResponse) serverManager.sendRequestGetResponse(printUniquePriceRequest, true);
         if (printUniquePriceResponse.getResult()) {
             StringBuilder result = new StringBuilder();
-            for (Integer price: printUniquePriceResponse.getResultList()) {
+            for (Integer price : printUniquePriceResponse.getResultList()) {
                 result.append(price.toString()).append("\n");
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
@@ -282,7 +338,7 @@ public class MainController {
         PrintFieldAscendingDiscountResponse printFieldAscendingDiscountResponse = (PrintFieldAscendingDiscountResponse) serverManager.sendRequestGetResponse(printFieldAscendingDiscountRequest, true);
         if (printFieldAscendingDiscountResponse.getResult()) {
             StringBuilder result = new StringBuilder();
-            for (Long discount: printFieldAscendingDiscountResponse.getResultList()) {
+            for (Long discount : printFieldAscendingDiscountResponse.getResultList()) {
                 result.append(discount.toString()).append("\n");
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
@@ -329,6 +385,7 @@ public class MainController {
     }
 
     public void addNewTicket() {
+        editTicketController.setDisable(false);
         stage.setTitle("Изменение билета");
         Scene lastScene = stage.getScene();
         Ticket ticket = editTicketController.add();
@@ -380,14 +437,19 @@ public class MainController {
                 }
             }
             Ticket ticket = ticketTableRow.getItem();
+
             editTicket(ticket);
         }
     }
 
     public void editTicket(Ticket ticket) {
+        editTicketController.setDisable(!Objects.equals(ticket.getCreationUserID(), serverManager.getUser().getId()));
         stage.setTitle("Изменение билета");
         Scene lastScene = stage.getScene();
         ticket = editTicketController.edit(ticket);
+        if (ticket == null) {
+            return;
+        }
         ticket.setCreationUser(serverManager.getUser());
         ticket.getEvent().setCreationUser(serverManager.getUser());
         UpdateRequest updateRequest = new UpdateRequest(ticket.getId(), ticket);

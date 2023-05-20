@@ -6,11 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro.JMetro;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class EditTicketController {
@@ -54,12 +52,15 @@ public class EditTicketController {
     @FXML
     private Spinner<Double> ticketYSpinner;
 
+    private boolean stopped = false;
+
 
     public EditTicketController(Stage stage) {
         this.stage = stage;
     }
 
     public void initialize() {
+
         ticketXSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE));
         ticketYSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(Float.MIN_VALUE, Float.MAX_VALUE));
         ticketPriceSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
@@ -82,10 +83,20 @@ public class EditTicketController {
         eventMinAgeSpinner.getValueFactory().setValue(0);
         ticketTypeChoiceBox.setValue(TicketType.USUAL.name());
         eventTypeChoiceBox.setValue(EventType.FOOTBALL.name());
+        clearForm();
     }
 
     public void showAndWait() {
+        stage.setOnCloseRequest(windowEvent -> EditTicketController.this.stopped = true);
         stage.showAndWait();
+    }
+
+    public boolean checkStopped() {
+        if (this.stopped) {
+            this.stopped = false;
+            return true;
+        }
+        return false;
     }
 
     public void saveTicket() {
@@ -120,9 +131,28 @@ public class EditTicketController {
 
     public Ticket add() {
         showAndWait();
+        if (checkStopped()) {
+            return null;
+        }
         Ticket ticket = fromFormsToEntity();
 //        clearForm();
         return ticket;
+    }
+
+    public void setDisable(boolean access) {
+        ticketNameTextField.setDisable(access);
+        ticketYSpinner.setDisable(access);
+        ticketXSpinner.setDisable(access);
+        ticketDiscountSpinner.setDisable(access);
+        ticketPriceSpinner.setDisable(access);
+        ticketCommentTextField.setDisable(access);
+        ticketTypeChoiceBox.setDisable(access);
+
+        eventNameTextFIeld.setDisable(access);
+        eventMinAgeSpinner.setDisable(access);
+        eventDateDatePicker.setDisable(access);
+        eventDescription.setDisable(access);
+        eventTypeChoiceBox.setDisable(access);
     }
 
     public Stage getStage() {
@@ -130,6 +160,7 @@ public class EditTicketController {
     }
 
     public Ticket edit(Ticket ticket) {
+
         ticketNameTextField.setText(ticket.getName());
         ticketPriceSpinner.getValueFactory().setValue(ticket.getPrice());
         ticketDiscountSpinner.getValueFactory().setValue(Math.toIntExact(ticket.getDiscount()));
@@ -144,6 +175,9 @@ public class EditTicketController {
         eventMinAgeSpinner.getValueFactory().setValue(Math.toIntExact(ticket.getEvent().getMinAge()));
         eventTypeChoiceBox.setValue(ticket.getEvent().getEventType().name());
         showAndWait();
+        if (checkStopped()) {
+            return null;
+        }
         Ticket newTicket = fromFormsToEntity();
         newTicket.setId(ticket.getId());
         clearForm();
