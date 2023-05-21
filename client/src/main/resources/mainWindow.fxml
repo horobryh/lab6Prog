@@ -72,7 +72,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                            <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
                            <font>
                               <Font size="14.0" />
@@ -80,17 +80,17 @@
                         </Label>
                         <ChoiceBox fx:id="filteringColumnChoiceBox" prefWidth="150.0">
                            <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
                         </ChoiceBox>
                         <Label text=":">
                            <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
                         </Label>
                         <TextField fx:id="filteringValueTextField" prefHeight="14.0" prefWidth="161.0">
                            <HBox.margin>
-                              <Insets />
+                              <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
                            <font>
                               <Font size="14.0" />
@@ -101,7 +101,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                            <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
                            <font>
                               <Font size="14.0" />
@@ -111,7 +111,17 @@
                   </HBox>
                </center>
                <left>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <Button fx:id="visualizationButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="180.0" text="Визуализация">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <BorderPane.margin>
+                        <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
+                     </BorderPane.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
                </left>
                <right>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -227,7 +237,7 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
-                  <MenuItem fx:id="DanishLanguageMenuItem" mnemonicParsing="false" text="Датский">
+                  <MenuItem fx:id="denmarkLanguageMenuItem" mnemonicParsing="false" text="Датский">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -235,7 +245,7 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
-                  <MenuItem fx:id="EnglishLanguageMenuItem" mnemonicParsing="false" text="Английский">
+                  <MenuItem fx:id="englishLanguageMenuItem" mnemonicParsing="false" text="Английский">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

@@ -16,6 +16,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static java.lang.System.exit;
@@ -25,10 +26,11 @@ public class Main extends Application {
     private static URL xmlUrlAuth = Main.class.getResource("/authWindow.fxml");
     private static URL xmlUrlMain = Main.class.getResource("/mainWindow.fxml");
     private static URL xmlUrlEdit = Main.class.getResource("/editTicketWindow.fxml");
-    private static ResourceBundle bundleRU = ResourceBundle.getBundle("languages");
-    private static ResourceBundle bundleEN = ResourceBundle.getBundle("languages_en");
-    private static ResourceBundle bundleDA = ResourceBundle.getBundle("languages_da");
-    private static ResourceBundle bundleTR = ResourceBundle.getBundle("languages_tr");
+    private static URL xmlUrlDrawing = Main.class.getResource("/drawingWindow.fxml");
+    private static ResourceBundle bundleRU = ResourceBundle.getBundle("languages", new Locale("ru", "RU"));
+    private static ResourceBundle bundleEN = ResourceBundle.getBundle("languages_en", new Locale("en", "UK"));
+    private static ResourceBundle bundleDA = ResourceBundle.getBundle("languages_da", new Locale("da", "DA"));
+    private static ResourceBundle bundleTR = ResourceBundle.getBundle("languages_tr", new Locale("tr", "TR"));
 
     public static void main(String[] args) {
         launch(args);
@@ -97,7 +99,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(xmlUrlAuth);
         LocaleManager localeManager = LocaleManager.getInstance(bundleRU, bundleEN, bundleDA, bundleTR);
-        AuthController authController = new AuthController(firstStartBuilder, xmlUrlMain, xmlUrlEdit, stage, localeManager);
+        AuthController authController = new AuthController(firstStartBuilder, xmlUrlMain, xmlUrlEdit, xmlUrlDrawing, stage, localeManager);
         loader.setController(authController);
 
         Parent root = loader.load();

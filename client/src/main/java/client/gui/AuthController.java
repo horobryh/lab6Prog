@@ -67,19 +67,20 @@ public class AuthController {
     private MenuItem turkishLanguageMenuItem;
     private URL mainURL;
     private URL editURL;
+    private URL drawingURL;
     private Stage stage;
 
     public void authClicked() {
         try {
             String message = firstStartBuilder.authorization(loginTextField.getText(), passwordPasswordField.getText());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.APPLY);
-            alert.setHeaderText("Авторизация");
+            alert.setHeaderText(localeManager.getName("auth.authorizationHeaderLabel"));
             alert.show();
             authBox.setDisable(true);
             portBox.setDisable(false);
         } catch (AuthorizationException e) {
             Alert alert1 = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.CLOSE);
-            alert1.setHeaderText("Ошибка авторизации");
+            alert1.setHeaderText(localeManager.getName("auth.alerts.authError"));
             alert1.show();
             return;
         }
@@ -87,7 +88,7 @@ public class AuthController {
             setMainScene();
         } catch (IOException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Произошла непредвиденная ошибка: " + e, ButtonType.CLOSE);
+            Alert alert = new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.error") + e, ButtonType.CLOSE);
             alert.showAndWait();
             exit(0);
         }
@@ -99,41 +100,43 @@ public class AuthController {
         } catch (NullPointerException | IOException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
             Alert alert1 = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.CLOSE);
-            alert1.setHeaderText("Произошла ошибка соединения с сервером");
+            alert1.setHeaderText(localeManager.getName("auth.alerts.serverConnectionError"));
             alert1.show();
             return;
         }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Соединение успешно!", ButtonType.APPLY);
-        alert.setHeaderText("Соединение с сервером");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, localeManager.getName("auth.alerts.serverConnectionSuccess"), ButtonType.APPLY);
+        alert.setHeaderText(localeManager.getName("auth.serverConnection"));
         alert.show();
         portBox.setDisable(true);
         authBox.setDisable(false);
     }
 
     public void initialize() {
+        changeLanguage();
         portSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 65535, 1));
         setMenuEvents();
     }
 
-    public AuthController(FirstStartBuilder firstStartBuilder, URL mainURL, URL editURL, Stage stage, LocaleManager localeManager) {
+    public AuthController(FirstStartBuilder firstStartBuilder, URL mainURL, URL editURL, URL drawingURL, Stage stage, LocaleManager localeManager) {
         this.firstStartBuilder = firstStartBuilder;
         this.mainURL = mainURL;
         this.stage = stage;
         this.editURL = editURL;
+        this.drawingURL = drawingURL;
         this.localeManager = localeManager;
     }
 
     public void setMainScene() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(mainURL);
-        fxmlLoader.setController(new MainController(firstStartBuilder.getServerManager(), stage, editURL, new CommandManager()));
+        fxmlLoader.setController(new MainController(firstStartBuilder.getServerManager(), stage, editURL, drawingURL, new CommandManager(), localeManager));
 
         Parent root = fxmlLoader.load();
         JMetro jMetro = new JMetro(Style.DARK);
         jMetro.setScene(new Scene(root));
         BorderPane borderPane = (BorderPane) fxmlLoader.getNamespace().get("backgroundBorderPane");
         borderPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
-        stage.setTitle("Основное окно");
+        stage.setTitle(localeManager.getName("main.mainWindow"));
         stage.setScene(jMetro.getScene());
         stage.show();
     }
@@ -158,17 +161,16 @@ public class AuthController {
     }
 
     public void changeLanguage() {
-        System.out.println("CHANGE!");
         authorizationHeaderLabel.setText(localeManager.getName("auth.authorizationHeaderLabel"));
         portBindingButton.setText(localeManager.getName("auth.portBindingButton"));
         loginTextField.setPromptText(localeManager.getName("auth.loginTextField"));
         passwordPasswordField.setPromptText(localeManager.getName("auth.passwordPasswordField"));
         authButton.setText(localeManager.getName("auth.authButton"));
 
-        languageMenu.setText(localeManager.getName("auth.languageMenu"));
-        russianLanguageMenuItem.setText(localeManager.getName("auth.russianLanguageMenuItem"));
-        englishLanguageMenuItem.setText(localeManager.getName("auth.englishLanguageMenuItem"));
-        denmarkLanguageMenuItem.setText(localeManager.getName("auth.denmarkLanguageMenuItem"));
-        turkishLanguageMenuItem.setText(localeManager.getName("auth.turkishLanguageMenuItem"));
+        languageMenu.setText(localeManager.getName("lang.languageMenu"));
+        russianLanguageMenuItem.setText(localeManager.getName("lang.russianLanguageMenuItem"));
+        englishLanguageMenuItem.setText(localeManager.getName("lang.englishLanguageMenuItem"));
+        denmarkLanguageMenuItem.setText(localeManager.getName("lang.denmarkLanguageMenuItem"));
+        turkishLanguageMenuItem.setText(localeManager.getName("lang.turkishLanguageMenuItem"));
     }
 }

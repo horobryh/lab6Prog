@@ -37,8 +37,13 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -190,7 +195,7 @@
                   <Insets />
                </GridPane.margin>
             </TextField>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="535.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Редактирование билета" GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <Label fx:id="headerLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="535.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Редактирование билета" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -217,4 +222,50 @@
          </children>
       </GridPane>
    </center>
+   <top>
+      <MenuBar style="-fx-background-color: transient;" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu fx:id="languageMenu" mnemonicParsing="false" style="-fx-background-color: transient;" text="Язык">
+            <items>
+              <MenuItem fx:id="russianLanguageMenuItem" mnemonicParsing="false" text="Русский">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/languages/ru.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="turkishLanguageMenuItem" mnemonicParsing="false" text="Турецкий">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/languages/tr.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="denmarkLanguageMenuItem" mnemonicParsing="false" text="Датский">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/languages/da.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="englishLanguageMenuItem" mnemonicParsing="false" text="Английский">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/languages/en.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
 </BorderPane>

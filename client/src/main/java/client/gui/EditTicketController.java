@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.math.BigDecimal;
@@ -14,13 +15,34 @@ import java.util.Date;
 public class EditTicketController {
     private Stage stage;
     @FXML
+    private BorderPane backgroundBorderPane;
+
+    @FXML
+    private MenuItem denmarkLanguageMenuItem;
+
+    @FXML
+    private MenuItem englishLanguageMenuItem;
+
+    @FXML
     private DatePicker eventDateDatePicker;
+
+    @FXML
+    private Label eventDateLabel;
 
     @FXML
     private TextField eventDescription;
 
     @FXML
+    private Label eventDescriptionLabel;
+
+    @FXML
+    private Label eventMinAgeLabel;
+
+    @FXML
     private Spinner<Integer> eventMinAgeSpinner;
+
+    @FXML
+    private Label eventNameLabel;
 
     @FXML
     private TextField eventNameTextFIeld;
@@ -29,16 +51,40 @@ public class EditTicketController {
     private ChoiceBox<String> eventTypeChoiceBox;
 
     @FXML
+    private Label eventTypeEvent;
+
+    @FXML
+    private Menu languageMenu;
+
+    @FXML
+    private MenuItem russianLanguageMenuItem;
+
+    @FXML
     private Button saveTicketButton;
+
+    @FXML
+    private Button saveTicketIfMinButton;
+
+    @FXML
+    private Label ticketCommentLabel;
 
     @FXML
     private TextField ticketCommentTextField;
 
     @FXML
+    private Label ticketDiscountLabel;
+
+    @FXML
     private Spinner<Integer> ticketDiscountSpinner;
 
     @FXML
+    private Label ticketNameLabel;
+
+    @FXML
     private TextField ticketNameTextField;
+
+    @FXML
+    private Label ticketPriceLabel;
 
     @FXML
     private Spinner<Integer> ticketPriceSpinner;
@@ -47,19 +93,36 @@ public class EditTicketController {
     private ChoiceBox<String> ticketTypeChoiceBox;
 
     @FXML
+    private Label ticketTypeLabel;
+
+    @FXML
+    private Label ticketXLabel;
+
+    @FXML
     private Spinner<Integer> ticketXSpinner;
+
+    @FXML
+    private Label ticketYLabel;
 
     @FXML
     private Spinner<Double> ticketYSpinner;
 
+    @FXML
+    private MenuItem turkishLanguageMenuItem;
+    @FXML
+    private Label headerLabel;
+
+    private final LocaleManager localeManager;
     private boolean stopped = false;
 
 
-    public EditTicketController(Stage stage) {
+    public EditTicketController(Stage stage, LocaleManager localeManager) {
         this.stage = stage;
+        this.localeManager = localeManager;
     }
 
     public void initialize() {
+        changeLanguage();
 
         ticketXSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE));
         ticketYSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(Float.MIN_VALUE, Float.MAX_VALUE));
@@ -84,6 +147,49 @@ public class EditTicketController {
         ticketTypeChoiceBox.setValue(TicketType.USUAL.name());
         eventTypeChoiceBox.setValue(EventType.FOOTBALL.name());
         clearForm();
+        setMenuEvents();
+    }
+
+    private void setMenuEvents() {
+        russianLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("ru");
+            changeLanguage();
+        });
+        englishLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("en");
+            changeLanguage();
+        });
+        denmarkLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("da");
+            changeLanguage();
+        });
+        turkishLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("tr");
+            changeLanguage();
+        });
+    }
+
+    private void changeLanguage() {
+        headerLabel.setText(localeManager.getName("edit.header"));
+        ticketNameLabel.setText(localeManager.getName("edit.ticketName"));
+        ticketXLabel.setText(localeManager.getName("edit.ticketX"));
+        ticketYLabel.setText(localeManager.getName("edit.ticketY"));
+        ticketPriceLabel.setText(localeManager.getName("edit.ticketPrice"));
+        ticketDiscountLabel.setText(localeManager.getName("edit.ticketDiscount"));
+        ticketCommentLabel.setText(localeManager.getName("edit.ticketComment"));
+        ticketTypeLabel.setText(localeManager.getName("edit.ticketType"));
+        eventNameLabel.setText(localeManager.getName("edit.eventName"));
+        eventDateLabel.setText(localeManager.getName("edit.eventDate"));
+        eventMinAgeLabel.setText(localeManager.getName("edit.eventMinAge"));
+        eventDescriptionLabel.setText(localeManager.getName("edit.eventDescription"));
+        eventTypeEvent.setText(localeManager.getName("edit.eventType"));
+        saveTicketIfMinButton.setText(localeManager.getName("edit.saveTicketIfMinButton"));
+        saveTicketButton.setText(localeManager.getName("edit.saveTicketButton"));
+        languageMenu.setText(localeManager.getName("lang.languageMenu"));
+        russianLanguageMenuItem.setText(localeManager.getName("lang.russianLanguageMenuItem"));
+        denmarkLanguageMenuItem.setText(localeManager.getName("lang.denmarkLanguageMenuItem"));
+        englishLanguageMenuItem.setText(localeManager.getName("lang.englishLanguageMenuItem"));
+        turkishLanguageMenuItem.setText(localeManager.getName("lang.turkishLanguageMenuItem"));
     }
 
     public void showAndWait() {
@@ -123,7 +229,7 @@ public class EditTicketController {
             event.setEventType(EventType.valueOf(eventTypeChoiceBox.getValue()));
             ticket.setEvent(event);
         } catch (NullPointerException e) {
-            new Alert(Alert.AlertType.ERROR, "Похоже, Вы заполнили не все поля формы. Попробуйте снова.").show();
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("edit.alerts.blankFieldError")).show();
             ticket = null;
         }
         return ticket;
@@ -135,7 +241,7 @@ public class EditTicketController {
             return null;
         }
         Ticket ticket = fromFormsToEntity();
-//        clearForm();
+        clearForm();
         return ticket;
     }
 
@@ -153,6 +259,9 @@ public class EditTicketController {
         eventDateDatePicker.setDisable(access);
         eventDescription.setDisable(access);
         eventTypeChoiceBox.setDisable(access);
+
+        saveTicketButton.setDisable(access);
+        saveTicketIfMinButton.setDisable(access);
     }
 
     public Stage getStage() {

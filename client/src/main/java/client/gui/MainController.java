@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +22,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
@@ -35,6 +38,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainController {
+    private final URL drawingURL;
     private HashMap<Integer, String> userToColorMap = new HashMap<>();
     @FXML
     private TableColumn<Ticket, String> eventCreationUserLogin;
@@ -59,7 +63,7 @@ public class MainController {
     private MenuItem russianLanguageMenuItem;
 
     @FXML
-    private Label filteringByLabe;
+    private Label filteringByLabel;
 
     @FXML
     private Menu helpMenu;
@@ -148,17 +152,28 @@ public class MainController {
     private TableColumn<Ticket, Float> ticketY;
     @FXML
     private ChoiceBox<String> filteringColumnChoiceBox;
-
+    @FXML
+    private MenuItem englishLanguageMenuItem;
+    @FXML
+    private MenuItem denmarkLanguageMenuItem;
+    @FXML
+    private MenuItem TurkishLanguageMenuItem;
+    @FXML
+    private Button visualizationButton;
+    private final DrawingController drawingController;
     private final ServerManager serverManager;
     private CommandManager commandManager;
     private EditTicketController editTicketController;
     private Stage stage;
     private Parent editParent;
+    private Parent drawingParent;
     private URL editURL;
     private ObservableList<Ticket> lastCollection = null;
     private HashSet<Ticket> oldCollection = new HashSet<>();
+    private final LocaleManager localeManager;
 
     public void initialize() {
+        changeLanguage();
         mainTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         mainUserLoginLabel.setText(serverManager.getUser().getLogin());
         setCellFactories();
@@ -171,17 +186,38 @@ public class MainController {
         filteringColumnChoiceBox.setValue("ticketID");
         try {
             loadEditController();
+            loadDrawingController();
         } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Произошла ошибка " + e);
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.error") + e);
             alert.show();
         }
     }
 
-    public MainController(ServerManager serverManager, Stage stage, URL editURL, CommandManager commandManager) {
+    private void loadDrawingController() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(drawingURL);
+        fxmlLoader.setController(drawingController);
+        drawingParent = fxmlLoader.load();
+        JMetro jMetro = new JMetro(Style.DARK);
+        jMetro.setScene(new Scene(drawingParent));
+        StackPane borderPane = (StackPane) fxmlLoader.getNamespace().get("backgroundStackPane");
+        borderPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
+
+        drawingController.getStage().setTitle(localeManager.getName("drawing.windowTitle"));
+        drawingController.getStage().setScene(jMetro.getScene());
+        drawingController.getStage().initModality(Modality.APPLICATION_MODAL);
+        drawingController.getStage().initOwner(stage);
+    }
+
+    public MainController(ServerManager serverManager, Stage stage, URL editURL, URL drawingURL, CommandManager commandManager, LocaleManager localeManager) {
+        this.localeManager = localeManager;
         this.serverManager = serverManager;
         this.stage = stage;
-        this.editTicketController = new EditTicketController(new Stage());
+        this.editTicketController = new EditTicketController(new Stage(), localeManager);
+        this.drawingController = new DrawingController(new Stage(), localeManager, userToColorMap);
         this.editURL = editURL;
+        this.drawingURL = drawingURL;
         this.commandManager = commandManager;
     }
 
@@ -263,6 +299,50 @@ public class MainController {
         infoMenuItem.setOnAction(actionEvent -> info());
         infoAboutCommandsMenuItem.setOnAction(actionEvent -> infoAboutCommands());
         refreshTableButton.setOnAction(actionEvent -> filterTable());
+
+        russianLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("ru");
+            changeLanguage();
+        });
+        englishLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("en");
+            changeLanguage();
+        });
+        denmarkLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("da");
+            changeLanguage();
+        });
+        turkishLanguageMenuItem.setOnAction(actionEvent -> {
+            localeManager.changeCurrentLanguage("tr");
+            changeLanguage();
+        });
+
+        visualizationButton.setOnAction(actionEvent -> drawElements());
+    }
+
+    private void changeLanguage() {
+        languageMenu.setText(localeManager.getName("lang.languageMenu"));
+        russianLanguageMenuItem.setText(localeManager.getName("lang.russianLanguageMenuItem"));
+        denmarkLanguageMenuItem.setText(localeManager.getName("lang.denmarkLanguageMenuItem"));
+        englishLanguageMenuItem.setText(localeManager.getName("lang.englishLanguageMenuItem"));
+        turkishLanguageMenuItem.setText(localeManager.getName("lang.turkishLanguageMenuItem"));
+
+        commandsMenu.setText(localeManager.getName("main.commandMenu"));
+        addTicketMenuItem.setText(localeManager.getName("main.menu.addNewTicket"));
+        clearCollectionMenuItem.setText(localeManager.getName("main.menu.clearCollection"));
+        countLessThanDiscountMenuItem.setText(localeManager.getName("main.menu.countTicketsThat"));
+        printFieldAscendingDiscountMenuItem.setText(localeManager.getName("main.menu.printDiscount"));
+        uniquePriceMenuItem.setText(localeManager.getName("main.menu.uniquePrice"));
+        infoMenuItem.setText(localeManager.getName("main.menu.infoAboutCollection"));
+
+        helpMenu.setText(localeManager.getName("main.helpMenu"));
+        infoAboutCommandsMenuItem.setText(localeManager.getName("main.help.help"));
+
+        filteringByLabel.setText(localeManager.getName("main.filterByColumnLabel"));
+        refreshTableButton.setText(localeManager.getName("main.refreshTableButton"));
+        currentUserLabel.setText(localeManager.getName("main.currentUserLabel"));
+
+
     }
 
     private void filterTable() {
@@ -287,7 +367,6 @@ public class MainController {
         Platform.runLater(() -> {
             mainTableView.setItems(FXCollections.observableArrayList(coll));
             mainTableView.refresh();
-            System.out.println("успешно");
         });
     }
 
@@ -297,7 +376,7 @@ public class MainController {
             result.append(command.getName()).append(" ").append(command.getArgs()).append("\t").append(command.getDescription()).append("\n");
         }
         Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
-        alert.setHeaderText("Успешно!");
+        alert.setHeaderText(localeManager.getName("main.alerts.success"));
         alert.setResizable(true);
         alert.show();
     }
@@ -308,11 +387,11 @@ public class MainController {
         if (infoResponse.getResult()) {
             List<Ticket> collection = infoResponse.getResultList();
             Date initializationDate = infoResponse.getInitializationDate();
-            String result = "Коллекция типа Vector<Ticket>";
-            result += "\n" + "Дата инициализации: " + initializationDate;
-            result += "\n" + "Количество элементов: " + collection.size();
+            String result = localeManager.getName("main.collectionType") + " Vector<Ticket>";
+            result += "\n" + localeManager.getName("main.initializationDate") + initializationDate;
+            result += "\n" + localeManager.getName("main.itemsQuantity") + collection.size();
             Alert alert = new Alert(Alert.AlertType.INFORMATION, result);
-            alert.setHeaderText("Успешно!");
+            alert.setHeaderText(localeManager.getName("main.alerts.success"));
             alert.show();
         }
     }
@@ -326,10 +405,10 @@ public class MainController {
                 result.append(price.toString()).append("\n");
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
-            alert.setHeaderText("Успешно!");
+            alert.setHeaderText(localeManager.getName("main.alerts.success"));
             alert.show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Произошла ошибка " + printUniquePriceResponse.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.error") + printUniquePriceResponse.getMessage()).show();
         }
     }
 
@@ -342,35 +421,35 @@ public class MainController {
                 result.append(discount.toString()).append("\n");
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
-            alert.setHeaderText("Успешно!");
+            alert.setHeaderText(localeManager.getName("main.alerts.success"));
             alert.show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Произошла ошибка " + printFieldAscendingDiscountResponse.getMessage());
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.error") + printFieldAscendingDiscountResponse.getMessage());
         }
     }
 
     private void countLessThanDiscount() {
         TextInputDialog textInputDialog = new TextInputDialog("0");
-        textInputDialog.setHeaderText("Введите значение discount");
+        textInputDialog.setHeaderText(localeManager.getName("main.alerts.discountQuantity"));
         textInputDialog.showAndWait();
         String discount = textInputDialog.getResult();
         Long parsedDiscount;
         try {
             parsedDiscount = Long.valueOf(discount);
         } catch (IllegalArgumentException e) {
-            new Alert(Alert.AlertType.ERROR, "Значение не является числом.").show();
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.notNumber")).show();
             return;
         }
         if (!(0 <= parsedDiscount && parsedDiscount <= 100)) {
-            new Alert(Alert.AlertType.ERROR, "Значение не помещается в пределы скидки.").show();
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.discountError")).show();
             return;
         }
         CountLessThanDiscountRequest countLessThanDiscountRequest = new CountLessThanDiscountRequest(parsedDiscount);
         CountLessThanDiscountResponse countLessThanDiscountResponse = (CountLessThanDiscountResponse) serverManager.sendRequestGetResponse(countLessThanDiscountRequest, true);
         if (countLessThanDiscountResponse.getResult()) {
-            new Alert(Alert.AlertType.INFORMATION, "Успешно. Результат: " + countLessThanDiscountResponse.getCount()).show();
+            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success") + countLessThanDiscountResponse.getCount()).show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Произошла ошибка " + countLessThanDiscountResponse.getMessage());
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.error") + countLessThanDiscountResponse.getMessage());
         }
     }
 
@@ -378,15 +457,15 @@ public class MainController {
         ClearRequest clearRequest = new ClearRequest();
         ClearResponse clearResponse = (ClearResponse) serverManager.sendRequestGetResponse(clearRequest, true);
         if (clearResponse.getResult()) {
-            new Alert(Alert.AlertType.INFORMATION, "Успешно").show();
+            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Произошла ошибка " + clearResponse.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.error") + clearResponse.getMessage()).show();
         }
     }
 
     public void addNewTicket() {
         editTicketController.setDisable(false);
-        stage.setTitle("Изменение билета");
+        stage.setTitle(localeManager.getName("main.ticketEditing"));
         Scene lastScene = stage.getScene();
         Ticket ticket = editTicketController.add();
         if (ticket == null) {
@@ -397,9 +476,9 @@ public class MainController {
         AddRequest addRequest = new AddRequest(ticket);
         AddResponse addResponse = (AddResponse) serverManager.sendRequestGetResponse(addRequest, true);
         if (addResponse.getResult()) {
-            new Alert(Alert.AlertType.INFORMATION, "Успешно!").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).showAndWait();
         } else {
-            new Alert(Alert.AlertType.ERROR, addResponse.getMessage()).showAndWait();
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.fieldsError")).showAndWait();
         }
         stage.setScene(lastScene);
         stage.setTitle("Основное окно");
@@ -415,7 +494,7 @@ public class MainController {
         BorderPane borderPane = (BorderPane) fxmlLoader.getNamespace().get("backgroundBorderPane");
         borderPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 
-        editTicketController.getStage().setTitle("Изменение билета");
+        editTicketController.getStage().setTitle(localeManager.getName("main.ticketEditing"));
         editTicketController.getStage().setScene(jMetro.getScene());
         editTicketController.getStage().initModality(Modality.APPLICATION_MODAL);
         editTicketController.getStage().initOwner(stage);
@@ -444,7 +523,7 @@ public class MainController {
 
     public void editTicket(Ticket ticket) {
         editTicketController.setDisable(!Objects.equals(ticket.getCreationUserID(), serverManager.getUser().getId()));
-        stage.setTitle("Изменение билета");
+        stage.setTitle(localeManager.getName("main.ticketEditing"));
         Scene lastScene = stage.getScene();
         ticket = editTicketController.edit(ticket);
         if (ticket == null) {
@@ -455,11 +534,21 @@ public class MainController {
         UpdateRequest updateRequest = new UpdateRequest(ticket.getId(), ticket);
         UpdateResponse updateResponse = (UpdateResponse) serverManager.sendRequestGetResponse(updateRequest, true);
         if (updateResponse.getResult()) {
-            new Alert(Alert.AlertType.INFORMATION, "Успешно.").show();
+            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).show();
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Произошла ошибка " + updateResponse.getMessage()).show();
+            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alers.error") + updateResponse.getMessage()).show();
         }
         stage.setScene(lastScene);
-        stage.setTitle("Основное окно");
+        stage.setTitle(localeManager.getName("main.mainWindow"));
+    }
+
+    public void drawElements() {
+        drawingController.draw(mainTableView.getItems());
+        Ticket ticket = drawingController.getMainTicket();
+        if (ticket == null) {
+            return;
+        }
+        editTicketController.setDisable(!Objects.equals(ticket.getCreationUserID(), serverManager.getUser().getId()));
+        editTicketController.edit(ticket);
     }
 }

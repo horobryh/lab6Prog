@@ -13,6 +13,7 @@ public class LocaleManager {
     public static LocaleManager getInstance(ResourceBundle bundleRU, ResourceBundle bundleEN, ResourceBundle bundleDA, ResourceBundle bundleTR) {
         if (instance == null) {
             instance = new LocaleManager(bundleRU, bundleEN, bundleDA, bundleTR);
+            instance.changeCurrentLanguage("ru");
         }
         return instance;
     }

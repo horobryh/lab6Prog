@@ -3,6 +3,7 @@ package general.models;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 import com.opencsv.bean.CsvRecurse;
+import general.validators.Verifiable;
 import general.validators.baseValidators.NotBlank;
 import general.validators.baseValidators.NotNull;
 import general.validators.baseValidators.SizeNumber;
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.locks.Condition;
 
 /**
  * Ticket model class
