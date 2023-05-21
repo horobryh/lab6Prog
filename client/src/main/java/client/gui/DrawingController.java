@@ -2,7 +2,7 @@ package client.gui;
 
 import general.models.Ticket;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -18,20 +18,15 @@ public class DrawingController {
     private Pane drawingPane;
 
     @FXML
-    private Button goBackButton;
+    private StackPane backgroundStackPane;
 
     @FXML
-    private StackPane backgroundStackPane;
+    private BorderPane upperBorderPane;
 
     private final LocaleManager localeManager;
     private final Stage stage;
     private Ticket mainTicket;
     private final HashMap<Integer, String> colors;
-
-    public void initialize() {
-        goBackButton.setText(localeManager.getName("drawing.goBackButton"));
-        goBackButton.setOnAction(actionEvent -> stage.close());
-    }
 
     public DrawingController(Stage stage, LocaleManager localeManager, HashMap<Integer, String> colors) {
         this.stage = stage;
@@ -45,6 +40,7 @@ public class DrawingController {
 
     public Ticket draw(List<Ticket> elements) {
         stage.show();
+        drawingPane.getChildren().clear();
         for (Ticket ticket: elements) {
             TicketCircle circle = new TicketCircle(ticket.getX() + stage.getWidth() / 2,
                     ticket.getY() + stage.getHeight() / 2, 20, ticket);

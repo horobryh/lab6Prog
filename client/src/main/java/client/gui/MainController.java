@@ -160,6 +160,8 @@ public class MainController {
     private MenuItem TurkishLanguageMenuItem;
     @FXML
     private Button visualizationButton;
+    @FXML
+    private MenuItem changeUserColorsMenuItem;
     private final DrawingController drawingController;
     private final ServerManager serverManager;
     private CommandManager commandManager;
@@ -318,6 +320,19 @@ public class MainController {
         });
 
         visualizationButton.setOnAction(actionEvent -> drawElements());
+        changeUserColorsMenuItem.setOnAction(actionEvent -> countNewColors(mainTableView.getItems()));
+    }
+
+    private void countNewColors(List<Ticket> collection) {
+        userToColorMap.clear();
+        for (Ticket ticket : collection) {
+            if (!userToColorMap.containsKey(ticket.getCreationUserID())) {
+
+                double result = Math.random() * 16777216;
+                userToColorMap.put(ticket.getCreationUserID(), String.format("%06x", (int) result));
+            }
+        }
+        mainTableView.refresh();
     }
 
     private void changeLanguage() {
@@ -342,7 +357,8 @@ public class MainController {
         refreshTableButton.setText(localeManager.getName("main.refreshTableButton"));
         currentUserLabel.setText(localeManager.getName("main.currentUserLabel"));
 
-
+        visualizationButton.setText(localeManager.getName("drawing.windowTitle"));
+        changeUserColorsMenuItem.setText(localeManager.getName("main.menu.changeUserColors"));
     }
 
     private void filterTable() {
@@ -548,7 +564,7 @@ public class MainController {
         if (ticket == null) {
             return;
         }
-        editTicketController.setDisable(!Objects.equals(ticket.getCreationUserID(), serverManager.getUser().getId()));
+        editTicketController.setDisable(true);
         editTicketController.edit(ticket);
     }
 }

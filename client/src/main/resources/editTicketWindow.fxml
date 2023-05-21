@@ -223,9 +223,9 @@
       </GridPane>
    </center>
    <top>
-      <MenuBar style="-fx-background-color: transient;" BorderPane.alignment="CENTER">
+      <MenuBar style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
         <menus>
-          <Menu fx:id="languageMenu" mnemonicParsing="false" style="-fx-background-color: transient;" text="Язык">
+          <Menu fx:id="languageMenu" mnemonicParsing="false" text="Язык">
             <items>
               <MenuItem fx:id="russianLanguageMenuItem" mnemonicParsing="false" text="Русский">
                      <graphic>

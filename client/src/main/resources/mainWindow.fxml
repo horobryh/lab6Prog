@@ -39,6 +39,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -111,7 +112,7 @@
                   </HBox>
                </center>
                <left>
-                  <Button fx:id="visualizationButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="180.0" text="Визуализация">
+                  <Button fx:id="visualizationButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="228.0" text="Визуализация">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -124,9 +125,9 @@
                   </Button>
                </left>
                <right>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="45.0" prefWidth="192.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="mainUserLoginLabel" alignment="CENTER" layoutX="-34.0" layoutY="8.0" prefHeight="25.0" prefWidth="258.0" text="Login">
+                        <Label fx:id="mainUserLoginLabel" alignment="CENTER" layoutX="9.0" layoutY="8.0" prefHeight="25.0" prefWidth="215.0" text="Login">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
@@ -217,6 +218,16 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="changeUserColorsMenuItem" mnemonicParsing="false" text="Обновить цвета таблицы">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/adjustments_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
                 </items>
               </Menu>
               <Menu fx:id="languageMenu" mnemonicParsing="false" text="Язык">

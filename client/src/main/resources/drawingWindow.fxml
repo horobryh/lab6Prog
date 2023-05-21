@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+
+<StackPane fx:id="backgroundStackPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane fx:id="linePane" disable="true" prefHeight="720.0" prefWidth="1024.0" StackPane.alignment="CENTER">
+         <children>
+            <Line endX="512.0" layoutX="512.0" layoutY="360.0" startX="-512.0" />
+            <Line endY="360.0" layoutX="512.0" layoutY="360.0" startY="-360.0" />
+            <Polygon fill="DODGERBLUE" layoutX="15.0" layoutY="15.0" points="478.5, -8.5, 478.5, 22.5, 519.4688720703125, 5.5311279296875" rotate="270.0" stroke="BLACK" strokeType="INSIDE" />
+            <Polygon fill="DODGERBLUE" layoutX="506.0" layoutY="353.0" points="478.5, -8.5, 478.5, 22.5, 519.4688720703125, 5.5311279296875" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Pane>
+      <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="200.0" StackPane.alignment="CENTER" />
+   </children>
+</StackPane>

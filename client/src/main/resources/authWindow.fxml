@@ -128,7 +128,7 @@
       <AnchorPane prefHeight="375.0" prefWidth="75.0" BorderPane.alignment="CENTER" />
    </right>
    <top>
-      <MenuBar style="-fx-background-color: transient;">
+      <MenuBar style="-fx-background-color: transparent;">
         <menus>
           <Menu fx:id="languageMenu" mnemonicParsing="false" text="Язык">
             <items>
