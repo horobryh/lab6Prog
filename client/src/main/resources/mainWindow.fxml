@@ -178,6 +178,15 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
+                        <MenuItem fx:id="addTicketIfMinMenuItem" mnemonicParsing="false" text="Добавить новый билет, если минимален">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/link_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
                         <MenuItem fx:id="clearCollectionMenuItem" mnemonicParsing="false" text="Очистить коллекцию">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -218,6 +227,16 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="executeScriptMenuItem" mnemonicParsing="false" text="Выполнить скрипт">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/png-32px/paperclip_32px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="changeUserColorsMenuItem" mnemonicParsing="false" text="Обновить цвета таблицы">
                            <graphic>

@@ -3,6 +3,7 @@ package server.commands.baseCommandsServer;
 import general.models.User;
 import general.network.Request;
 import general.network.Response;
+import general.network.requests.RemoveByIDRequest;
 import general.network.requests.UpdateRequest;
 import general.network.responses.RemoveByIDResponse;
 import general.validators.exceptions.EmptyCollectionException;
@@ -22,7 +23,7 @@ public class RemoveByIDCommand implements Executable {
     private Server server;
     @Override
     public Response execute(Request request) {
-        Integer id = ((UpdateRequest) request).getId();
+        Integer id = ((RemoveByIDRequest) request).getId();
         Ticket elementForUpdating;
         try {
             elementForUpdating = collectionManager.getElementByID(id);
@@ -45,14 +46,6 @@ public class RemoveByIDCommand implements Executable {
         } catch (SQLException e) {
             return new RemoveByIDResponse(false, false, "Произошла ошибка при удалении объекта " + e);
         }
-
-//        Integer id = ((RemoveByIDRequest) request).getId();
-//        if (Ticket.checkIDInUsed(id)) {
-//            collectionManager.removeByID(id);
-//            return new RemoveByIDResponse(true, true);
-//        } else {
-//            return new RemoveByIDResponse(true, false);
-//        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package client.gui;
 import client.Main;
 import client.commands.CommandManager;
 import client.commands.Executable;
+import client.scannerManager.ScannerManager;
 import client.serverManager.ServerManager;
 import general.models.Ticket;
 import general.models.TicketType;
@@ -25,13 +26,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -162,6 +164,10 @@ public class MainController {
     private Button visualizationButton;
     @FXML
     private MenuItem changeUserColorsMenuItem;
+    @FXML
+    private MenuItem executeScriptMenuItem;
+    @FXML
+    private MenuItem addTicketIfMinMenuItem;
     private final DrawingController drawingController;
     private final ServerManager serverManager;
     private CommandManager commandManager;
@@ -196,7 +202,7 @@ public class MainController {
         }
     }
 
-    private void loadDrawingController() throws IOException{
+    private void loadDrawingController() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(drawingURL);
         fxmlLoader.setController(drawingController);
@@ -239,7 +245,7 @@ public class MainController {
         resultAddingSet.addAll(coll);
         resultAddingSet.removeAll(oldCollection);
 
-        if (resultAddingSet.toArray().length > 0 || coll.toArray().length == 0) {
+        if (resultAddingSet.toArray().length > 0 || coll.toArray().length == 0 || oldCollection.size() != coll.size()) {
             oldCollection = new HashSet<>(coll);
             Platform.runLater(() -> {
                 mainTableView.setItems(FXCollections.observableArrayList(coll));
@@ -301,6 +307,8 @@ public class MainController {
         infoMenuItem.setOnAction(actionEvent -> info());
         infoAboutCommandsMenuItem.setOnAction(actionEvent -> infoAboutCommands());
         refreshTableButton.setOnAction(actionEvent -> filterTable());
+        executeScriptMenuItem.setOnAction(actionEvent -> executeScript());
+        addTicketIfMinMenuItem.setOnAction(actionEvent -> addNewTicketIfMin());
 
         russianLanguageMenuItem.setOnAction(actionEvent -> {
             localeManager.changeCurrentLanguage("ru");
@@ -321,6 +329,41 @@ public class MainController {
 
         visualizationButton.setOnAction(actionEvent -> drawElements());
         changeUserColorsMenuItem.setOnAction(actionEvent -> countNewColors(mainTableView.getItems()));
+    }
+
+    private void addNewTicketIfMin() {
+        editTicketController.setDisable(false);
+        stage.setTitle(localeManager.getName("main.ticketEditing"));
+        Scene lastScene = stage.getScene();
+        Ticket ticket = editTicketController.add();
+        if (ticket == null) {
+            return;
+        }
+        ticket.setCreationUser(serverManager.getUser());
+        ticket.getEvent().setCreationUser(serverManager.getUser());
+        AddIfMinRequest addRequest = new AddIfMinRequest(ticket);
+        AddIfMinResponse addResponse = (AddIfMinResponse) serverManager.sendRequestGetResponse(addRequest, true);
+        if (addResponse.getResult()) {
+            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).showAndWait();
+        } else {
+            new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.fieldsError")).showAndWait();
+        }
+        stage.setScene(lastScene);
+        stage.setTitle("Основное окно");
+    }
+
+    private void executeScript() {
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        try{
+            InputStream io = new FileInputStream(selectedFile);
+            if (selectedFile != null) {
+                ScannerManager scannerManager = new ScannerManager(io, commandManager, false);
+                scannerManager.startScan();
+            }
+        } catch (FileNotFoundException ignored) {
+        }
+
     }
 
     private void countNewColors(List<Ticket> collection) {
@@ -545,6 +588,16 @@ public class MainController {
         if (ticket == null) {
             return;
         }
+        if (ticket.getClass() == Ticket.DeleteTicket.class) {
+            RemoveByIDRequest request = new RemoveByIDRequest(((Ticket.DeleteTicket) ticket).getTicket().getId());
+            RemoveByIDResponse removeByIDResponse = (RemoveByIDResponse) serverManager.sendRequestGetResponse(request, true);
+            if (removeByIDResponse.getResult()) {
+                new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).show();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.error") + removeByIDResponse.getMessage()).show();
+            }
+            return;
+        }
         ticket.setCreationUser(serverManager.getUser());
         ticket.getEvent().setCreationUser(serverManager.getUser());
         UpdateRequest updateRequest = new UpdateRequest(ticket.getId(), ticket);
@@ -552,7 +605,7 @@ public class MainController {
         if (updateResponse.getResult()) {
             new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).show();
         } else {
-            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alers.error") + updateResponse.getMessage()).show();
+            new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.error") + updateResponse.getMessage()).show();
         }
         stage.setScene(lastScene);
         stage.setTitle(localeManager.getName("main.mainWindow"));

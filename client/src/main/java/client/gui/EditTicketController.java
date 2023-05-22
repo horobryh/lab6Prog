@@ -56,14 +56,12 @@ public class EditTicketController {
     @FXML
     private Menu languageMenu;
 
+
     @FXML
     private MenuItem russianLanguageMenuItem;
 
     @FXML
     private Button saveTicketButton;
-
-    @FXML
-    private Button saveTicketIfMinButton;
 
     @FXML
     private Label ticketCommentLabel;
@@ -111,9 +109,12 @@ public class EditTicketController {
     private MenuItem turkishLanguageMenuItem;
     @FXML
     private Label headerLabel;
+    @FXML
+    private Button deleteTicketButton;
 
     private final LocaleManager localeManager;
     private boolean stopped = false;
+    private boolean deleteTicketChecking;
 
 
     public EditTicketController(Stage stage, LocaleManager localeManager) {
@@ -167,6 +168,12 @@ public class EditTicketController {
             localeManager.changeCurrentLanguage("tr");
             changeLanguage();
         });
+        deleteTicketButton.setOnAction(actionEvent -> deleteTicket());
+    }
+
+    private void deleteTicket() {
+        this.deleteTicketChecking = true;
+        stage.close();
     }
 
     private void changeLanguage() {
@@ -183,7 +190,6 @@ public class EditTicketController {
         eventMinAgeLabel.setText(localeManager.getName("edit.eventMinAge"));
         eventDescriptionLabel.setText(localeManager.getName("edit.eventDescription"));
         eventTypeEvent.setText(localeManager.getName("edit.eventType"));
-        saveTicketIfMinButton.setText(localeManager.getName("edit.saveTicketIfMinButton"));
         saveTicketButton.setText(localeManager.getName("edit.saveTicketButton"));
         languageMenu.setText(localeManager.getName("lang.languageMenu"));
         russianLanguageMenuItem.setText(localeManager.getName("lang.russianLanguageMenuItem"));
@@ -237,7 +243,7 @@ public class EditTicketController {
 
     public Ticket add() {
         showAndWait();
-        if (checkStopped()) {
+        if (checkStopped() || deleteTicketChecking) {
             return null;
         }
         Ticket ticket = fromFormsToEntity();
@@ -261,7 +267,6 @@ public class EditTicketController {
         eventTypeChoiceBox.setDisable(access);
 
         saveTicketButton.setDisable(access);
-        saveTicketIfMinButton.setDisable(access);
     }
 
     public Stage getStage() {
@@ -287,10 +292,21 @@ public class EditTicketController {
         if (checkStopped()) {
             return null;
         }
+        if (checkDeleting()) {
+            return new Ticket.DeleteTicket(ticket);
+        }
         Ticket newTicket = fromFormsToEntity();
         newTicket.setId(ticket.getId());
         clearForm();
         return newTicket;
+    }
+
+    private boolean checkDeleting() {
+        if (this.deleteTicketChecking) {
+            this.deleteTicketChecking = false;
+            return true;
+        }
+        return false;
     }
 
     private void clearForm() {

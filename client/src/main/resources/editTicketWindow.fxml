@@ -213,7 +213,7 @@
                   <Insets />
                </GridPane.margin>
             </ChoiceBox>
-            <Button fx:id="saveTicketIfMinButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveTicket" prefHeight="30.0" prefWidth="245.0" style="-fx-font-size: 14px;" text="Сохранить, если билет минимален" GridPane.rowIndex="16" />
+            <Button fx:id="deleteTicketButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="245.0" style="-fx-font-size: 14px;" text="Удалить" GridPane.rowIndex="16" />
             <BorderPane GridPane.columnIndex="1" GridPane.rowIndex="16">
                <center>
                   <Button fx:id="saveTicketButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveTicket" prefHeight="25.0" prefWidth="218.0" style="-fx-font-size: 14px;" text="Сохранить" />

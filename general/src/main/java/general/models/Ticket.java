@@ -296,4 +296,16 @@ public class Ticket extends BaseModelWithValidators implements Serializable, Aut
 
         return result;
     }
+
+    public static class DeleteTicket extends Ticket {
+        private Ticket ticket;
+
+        public  DeleteTicket(Ticket ticket) {
+            this.ticket = ticket;
+        }
+
+        public Ticket getTicket() {
+            return this.ticket;
+        }
+    }
 }
