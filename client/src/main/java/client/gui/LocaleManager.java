@@ -2,6 +2,7 @@ package client.gui;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -29,6 +30,10 @@ public class LocaleManager {
         if (bundlesMap.containsKey(code)) {
             currentBundle = bundlesMap.get(code);
         }
+    }
+
+    public Locale getLocale() {
+        return currentBundle.getLocale();
     }
 
     public String getName(String key) {

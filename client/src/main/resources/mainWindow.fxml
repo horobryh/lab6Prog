@@ -303,7 +303,7 @@
          <right>
             <HBox BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="currentUserLabel" alignment="CENTER" contentDisplay="RIGHT" prefHeight="25.0" prefWidth="269.0" text="Текущий пользователь:" textAlignment="RIGHT">
+                  <Label fx:id="currentUserLabel" alignment="CENTER" contentDisplay="RIGHT" prefHeight="25.0" prefWidth="288.0" text="Текущий пользователь:" textAlignment="RIGHT">
                      <font>
                         <Font size="14.0" />
                      </font>

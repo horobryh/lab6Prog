@@ -25,7 +25,6 @@ public class ScannerManager {
             System.out.println("Введите команду:");
         }
         while (scanner.hasNext()) {
-
             String[] arguments = scanner.nextLine().split(" ");
             try {
                 commandManager.executeCommand(arguments, scanner);

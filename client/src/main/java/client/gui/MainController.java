@@ -35,7 +35,12 @@ import jfxtras.styles.jmetro.Style;
 
 import java.io.*;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -103,7 +108,7 @@ public class MainController {
     private Label currentUserLabel;
 
     @FXML
-    private TableColumn<Ticket, LocalDateTime> eventDate;
+    private TableColumn<Ticket, String> eventDate;
 
     @FXML
     private TableColumn<Ticket, String> eventDescription;
@@ -130,7 +135,7 @@ public class MainController {
     private TableColumn<Ticket, String> ticketCreationUserLogin;
 
     @FXML
-    private TableColumn<Ticket, Date> ticketDate;
+    private TableColumn<Ticket, String> ticketDate;
 
     @FXML
     private TableColumn<Ticket, Integer> ticketDiscount;
@@ -282,8 +287,8 @@ public class MainController {
         ticketName.setCellValueFactory(new PropertyValueFactory<>("name"));
         ticketX.setCellValueFactory(new PropertyValueFactory<>("x"));
         ticketY.setCellValueFactory(new PropertyValueFactory<>("y"));
-        ticketDate.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
-        ticketPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        ticketDate.setCellValueFactory(ticket -> new SimpleObjectProperty<>(DateFormat.getDateInstance(DateFormat.DATE_FIELD, localeManager.getLocale()).format(ticket.getValue().getCreationDate())));
+        ticketPrice.setCellValueFactory(ticket -> new SimpleObjectProperty<>(ticket.getValue().getPrice()));
         ticketDiscount.setCellValueFactory(new PropertyValueFactory<>("discount"));
         ticketComment.setCellValueFactory(new PropertyValueFactory<>("comment"));
         ticketType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -291,7 +296,7 @@ public class MainController {
 
         eventID.setCellValueFactory(ticket -> new SimpleObjectProperty<>(ticket.getValue().getEvent().getId()));
         eventName.setCellValueFactory(ticket -> new SimpleObjectProperty<>(ticket.getValue().getEvent().getName()));
-        eventDate.setCellValueFactory(ticket -> new SimpleObjectProperty<>(ticket.getValue().getEvent().getDate()));
+        eventDate.setCellValueFactory(ticket -> new SimpleObjectProperty<>(DateFormat.getDateInstance(DateFormat.DATE_FIELD, localeManager.getLocale()).format(Date.from(ticket.getValue().getEvent().getDate().atZone(ZoneId.systemDefault()).toInstant()))));
         eventMinAge.setCellValueFactory(ticket -> new SimpleObjectProperty<>(ticket.getValue().getEvent().getMinAge()));
         eventDescription.setCellValueFactory(ticket -> new SimpleObjectProperty<>(ticket.getValue().getEvent().getDescription()));
         eventType.setCellValueFactory(ticket -> new SimpleObjectProperty<>(ticket.getValue().getEvent().getEventType()).asString());
@@ -345,6 +350,7 @@ public class MainController {
         AddIfMinResponse addResponse = (AddIfMinResponse) serverManager.sendRequestGetResponse(addRequest, true);
         if (addResponse.getResult()) {
             new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).showAndWait();
+            editTicketController.clearForm();
         } else {
             new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.fieldsError")).showAndWait();
         }
@@ -402,6 +408,11 @@ public class MainController {
 
         visualizationButton.setText(localeManager.getName("drawing.windowTitle"));
         changeUserColorsMenuItem.setText(localeManager.getName("main.menu.changeUserColors"));
+
+        eventDate.setCellValueFactory(ticket -> new SimpleObjectProperty<>(DateFormat.getDateInstance(DateFormat.DEFAULT, localeManager.getLocale()).format(Date.from(ticket.getValue().getEvent().getDate().atZone(ZoneId.systemDefault()).toInstant()))));
+        ticketDate.setCellValueFactory(ticket -> new SimpleObjectProperty<>(DateFormat.getDateInstance(DateFormat.DEFAULT, localeManager.getLocale()).format(ticket.getValue().getCreationDate())));
+        loadCollection();
+        mainTableView.refresh();
     }
 
     private void filterTable() {
@@ -536,6 +547,7 @@ public class MainController {
         AddResponse addResponse = (AddResponse) serverManager.sendRequestGetResponse(addRequest, true);
         if (addResponse.getResult()) {
             new Alert(Alert.AlertType.INFORMATION, localeManager.getName("main.alerts.success")).showAndWait();
+            editTicketController.clearForm();
         } else {
             new Alert(Alert.AlertType.ERROR, localeManager.getName("main.alerts.fieldsError")).showAndWait();
         }

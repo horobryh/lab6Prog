@@ -247,7 +247,6 @@ public class EditTicketController {
             return null;
         }
         Ticket ticket = fromFormsToEntity();
-        clearForm();
         return ticket;
     }
 
@@ -309,7 +308,7 @@ public class EditTicketController {
         return false;
     }
 
-    private void clearForm() {
+    public void clearForm() {
         ticketNameTextField.clear();
         ticketPriceSpinner.getValueFactory().setValue(0);
         ticketDiscountSpinner.getValueFactory().setValue(0);

@@ -3,7 +3,6 @@ package client;
 import client.gui.AuthController;
 import client.builders.FirstStartBuilder;
 import client.gui.LocaleManager;
-import clojure.lang.IFn;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +15,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -27,10 +27,10 @@ public class Main extends Application {
     private static URL xmlUrlMain = Main.class.getResource("/mainWindow.fxml");
     private static URL xmlUrlEdit = Main.class.getResource("/editTicketWindow.fxml");
     private static URL xmlUrlDrawing = Main.class.getResource("/drawingWindow.fxml");
-    private static ResourceBundle bundleRU = ResourceBundle.getBundle("languages", new Locale("ru", "RU"));
-    private static ResourceBundle bundleEN = ResourceBundle.getBundle("languages_en", new Locale("en", "UK"));
-    private static ResourceBundle bundleDA = ResourceBundle.getBundle("languages_da", new Locale("da", "DA"));
-    private static ResourceBundle bundleTR = ResourceBundle.getBundle("languages_tr", new Locale("tr", "TR"));
+    private static ResourceBundle bundleRU = ResourceBundle.getBundle("Languages", Locale.getDefault());
+    private static ResourceBundle bundleEN = ResourceBundle.getBundle("Languages", new Locale("en", "UK"));
+    private static ResourceBundle bundleDA = ResourceBundle.getBundle("Languages", new Locale("da", "DA"));
+    private static ResourceBundle bundleTR = ResourceBundle.getBundle("Languages", new Locale("tr", "TR"));
 
     public static void main(String[] args) {
         launch(args);
