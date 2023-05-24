@@ -35,6 +35,9 @@ public class FirstStartBuilder {
     }
 
     public String authorization(String login, String password) throws AuthorizationException {
+        if (login.isBlank() || password.isBlank()) {
+            throw new AuthorizationException("");
+        }
         ArrayList arrayList = new AuthCommand(serverManager).getUser(login, password);
         User user = (User) arrayList.get(0);
         String message = arrayList.get(1).equals("") ? ((Boolean) arrayList.get(2) ? "Успешно" : "Произошла ошибка") : (String) arrayList.get(1);

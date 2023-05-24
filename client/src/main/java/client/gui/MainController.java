@@ -72,11 +72,8 @@ public class MainController {
     @FXML
     private Label filteringByLabel;
 
-    @FXML
-    private Menu helpMenu;
-
-    @FXML
-    private MenuItem infoAboutCommandsMenuItem;
+//    @FXML
+//    private MenuItem infoAboutCommandsMenuItem;
 
     @FXML
     private MenuItem infoMenuItem;
@@ -310,7 +307,7 @@ public class MainController {
         printFieldAscendingDiscountMenuItem.setOnAction(actionEvent -> printFieldAscendingDiscount());
         uniquePriceMenuItem.setOnAction(actionEvent -> uniquePrice());
         infoMenuItem.setOnAction(actionEvent -> info());
-        infoAboutCommandsMenuItem.setOnAction(actionEvent -> infoAboutCommands());
+//        infoAboutCommandsMenuItem.setOnAction(actionEvent -> infoAboutCommands());
         refreshTableButton.setOnAction(actionEvent -> filterTable());
         executeScriptMenuItem.setOnAction(actionEvent -> executeScript());
         addTicketIfMinMenuItem.setOnAction(actionEvent -> addNewTicketIfMin());
@@ -399,9 +396,6 @@ public class MainController {
         uniquePriceMenuItem.setText(localeManager.getName("main.menu.uniquePrice"));
         infoMenuItem.setText(localeManager.getName("main.menu.infoAboutCollection"));
 
-        helpMenu.setText(localeManager.getName("main.helpMenu"));
-        infoAboutCommandsMenuItem.setText(localeManager.getName("main.help.help"));
-
         filteringByLabel.setText(localeManager.getName("main.filterByColumnLabel"));
         refreshTableButton.setText(localeManager.getName("main.refreshTableButton"));
         currentUserLabel.setText(localeManager.getName("main.currentUserLabel"));
@@ -442,16 +436,16 @@ public class MainController {
         });
     }
 
-    private void infoAboutCommands() {
-        StringBuilder result = new StringBuilder();
-        for (Executable command : commandManager.getCommands().values()) {
-            result.append(command.getName()).append(" ").append(command.getArgs()).append("\t").append(command.getDescription()).append("\n");
-        }
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
-        alert.setHeaderText(localeManager.getName("main.alerts.success"));
-        alert.setResizable(true);
-        alert.show();
-    }
+//    private void infoAboutCommands() {
+//        StringBuilder result = new StringBuilder();
+//        for (Executable command : commandManager.getCommands().values()) {
+//            result.append(command.getName()).append(" ").append(command.getArgs()).append("\t").append(command.getDescription()).append("\n");
+//        }
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION, result.toString());
+//        alert.setHeaderText(localeManager.getName("main.alerts.success"));
+//        alert.setResizable(true);
+//        alert.show();
+//    }
 
     private void info() {
         InfoRequest infoRequest = new InfoRequest();
