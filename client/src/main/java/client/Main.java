@@ -27,10 +27,10 @@ public class Main extends Application {
     private static URL xmlUrlMain = Main.class.getResource("/mainWindow.fxml");
     private static URL xmlUrlEdit = Main.class.getResource("/editTicketWindow.fxml");
     private static URL xmlUrlDrawing = Main.class.getResource("/drawingWindow.fxml");
-    private static ResourceBundle bundleRU = ResourceBundle.getBundle("Languages", Locale.getDefault());
-    private static ResourceBundle bundleEN = ResourceBundle.getBundle("Languages", new Locale("en", "UK"));
-    private static ResourceBundle bundleDA = ResourceBundle.getBundle("Languages", new Locale("da", "DA"));
-    private static ResourceBundle bundleTR = ResourceBundle.getBundle("Languages", new Locale("tr", "TR"));
+    private static ResourceBundle bundleRU = ResourceBundle.getBundle("client.resources.Languages", Locale.getDefault());
+    private static ResourceBundle bundleEN = ResourceBundle.getBundle("client.resources.Languages", new Locale("en", "UK"));
+    private static ResourceBundle bundleDA = ResourceBundle.getBundle("client.resources.Languages", new Locale("da", "DA"));
+    private static ResourceBundle bundleTR = ResourceBundle.getBundle("client.resources.Languages", new Locale("tr", "TR"));
 
     public static void main(String[] args) {
         launch(args);

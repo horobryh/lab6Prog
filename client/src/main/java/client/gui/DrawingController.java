@@ -1,6 +1,8 @@
 package client.gui;
 
 import general.models.Ticket;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -8,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,17 +41,32 @@ public class DrawingController {
         return this.stage;
     }
 
+    public void initialize() {
+        stage.setResizable(false);
+
+
+    }
+
     public Ticket draw(List<Ticket> elements) {
         stage.show();
         drawingPane.getChildren().clear();
         for (Ticket ticket: elements) {
-            TicketCircle circle = new TicketCircle(ticket.getX() + stage.getWidth() / 2,
-                    ticket.getY() + stage.getHeight() / 2, 20, ticket);
+            TicketCircle circle = new TicketCircle(stage.getWidth() / 2, stage.getHeight() / 2, 5, ticket);
             circle.setOnMouseClicked(mouseEvent -> setMainTicket((TicketCircle) mouseEvent.getSource()));
             circle.setFill(Color.valueOf(colors.get(ticket.getCreationUserID())));
-            drawingPane.getChildren().add(
-                    circle
-            );
+            drawingPane.getChildren().add(circle);
+            TranslateTransition translateTransition = new TranslateTransition();
+            translateTransition.setDuration(Duration.seconds(3));
+            translateTransition.setNode(circle);
+
+            translateTransition.setToX(circle.getTicket().getX());
+            translateTransition.setToY(circle.getTicket().getY());
+            translateTransition.play();
+
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(3), circle);
+            scaleTransition.setToX(5);
+            scaleTransition.setToY(5);
+            scaleTransition.play();
         }
         stage.hide();
         stage.showAndWait();

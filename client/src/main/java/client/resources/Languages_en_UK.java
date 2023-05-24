@@ -61,7 +61,9 @@ public class Languages_en_UK extends ListResourceBundle {
                 {"auth.serverConnection", "Server connection"},
                 {"drawing.windowTitle", "Visualization of the current state"},
                 {"main.menu.changeUserColors", "Update table colors"},
-                {"edit.deleteTicketButton", "Delete"}
+                {"edit.deleteTicketButton", "Delete"},
+                {"main.addIfMin", "Add ticket if minimal"},
+                {"main.executeScript", "Execute script"}
         };
     }
 }

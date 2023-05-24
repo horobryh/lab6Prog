@@ -266,6 +266,7 @@ public class EditTicketController {
         eventTypeChoiceBox.setDisable(access);
 
         saveTicketButton.setDisable(access);
+        deleteTicketButton.setDisable(access);
     }
 
     public Stage getStage() {

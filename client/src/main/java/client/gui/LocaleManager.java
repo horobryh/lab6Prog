@@ -1,10 +1,6 @@
 package client.gui;
 
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 
 public class LocaleManager {
     private static LocaleManager instance = null;
@@ -37,6 +33,11 @@ public class LocaleManager {
     }
 
     public String getName(String key) {
-        return currentBundle.getString(key);
+        try {
+            return currentBundle.getString(key);
+        } catch (MissingResourceException e) {
+            return "null";
+        }
+
     }
 }

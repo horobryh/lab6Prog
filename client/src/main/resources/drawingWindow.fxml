@@ -7,14 +7,14 @@
 
 <StackPane fx:id="backgroundStackPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane fx:id="linePane" disable="true" prefHeight="720.0" prefWidth="1024.0" StackPane.alignment="CENTER">
+      <Pane fx:id="linePane" disable="true" prefHeight="720.0" prefWidth="1024.0">
          <children>
-            <Line endX="512.0" layoutX="512.0" layoutY="360.0" startX="-512.0" />
-            <Line endY="360.0" layoutX="512.0" layoutY="360.0" startY="-360.0" />
-            <Polygon fill="DODGERBLUE" layoutX="15.0" layoutY="15.0" points="478.5, -8.5, 478.5, 22.5, 519.4688720703125, 5.5311279296875" rotate="270.0" stroke="BLACK" strokeType="INSIDE" />
-            <Polygon fill="DODGERBLUE" layoutX="506.0" layoutY="353.0" points="478.5, -8.5, 478.5, 22.5, 519.4688720703125, 5.5311279296875" stroke="BLACK" strokeType="INSIDE" />
+            <Line endX="512.0" layoutX="512.0" layoutY="360.0" startX="-512.0" stroke="WHITE" />
+            <Line endY="360.0" layoutX="512.0" layoutY="360.0" startY="-360.0" stroke="WHITE" />
+            <Polygon fill="#91caff" layoutX="15.0" layoutY="15.0" points="478.5, -8.5, 478.5, 22.5, 519.4688720703125, 5.5311279296875" rotate="270.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Polygon fill="#91caff" layoutX="506.0" layoutY="353.0" points="478.5, -8.5, 478.5, 22.5, 519.4688720703125, 5.5311279296875" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
          </children>
       </Pane>
-      <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="200.0" StackPane.alignment="CENTER" />
+      <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </StackPane>

@@ -62,6 +62,8 @@ public class Languages_tr_TR extends ListResourceBundle {
                 {"drawing.windowTitle", "Mevcut durumun gÃ¶rselleÅtirilmesi"},
                 {"main.menu.changeUserColors", "Tablo renklerini gÃ¼ncelle"},
                 {"edit.deleteTicketButton", "Silmek"},
+                {"main.addIfMin", "Minimum ise bilet ekleyin"},
+                {"main.executeScript", "Komut dosyasını çalıştır"}
         };
     }
 }

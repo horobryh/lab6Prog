@@ -73,9 +73,9 @@ public class AuthController {
     public void authClicked() {
         try {
             String message = firstStartBuilder.authorization(loginTextField.getText(), passwordPasswordField.getText());
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.APPLY);
-            alert.setHeaderText(localeManager.getName("auth.authorizationHeaderLabel"));
-            alert.show();
+//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.APPLY);
+//            alert.setHeaderText(localeManager.getName("auth.authorizationHeaderLabel"));
+//            alert.show();
             authBox.setDisable(true);
             portBox.setDisable(false);
         } catch (AuthorizationException e) {

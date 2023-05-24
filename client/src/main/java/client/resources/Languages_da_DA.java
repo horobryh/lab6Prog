@@ -63,6 +63,8 @@ public class Languages_da_DA extends ListResourceBundle {
                 {"drawing.windowTitle", "Visualisering af den aktuelle tilstand"},
                 {"main.menu.changeUserColors", "Opdater bordfarver"},
                 {"edit.deleteTicketButton", "Slet"},
+                {"main.addIfMin", "Tilføj billet, hvis minimum"},
+                {"main.executeScript", "Kør script"}
         };
     }
 }

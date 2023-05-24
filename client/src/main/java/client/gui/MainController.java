@@ -362,8 +362,8 @@ public class MainController {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(stage);
         try{
-            InputStream io = new FileInputStream(selectedFile);
             if (selectedFile != null) {
+                InputStream io = new FileInputStream(selectedFile);
                 ScannerManager scannerManager = new ScannerManager(io, commandManager, false);
                 scannerManager.startScan();
             }
@@ -408,6 +408,8 @@ public class MainController {
 
         visualizationButton.setText(localeManager.getName("drawing.windowTitle"));
         changeUserColorsMenuItem.setText(localeManager.getName("main.menu.changeUserColors"));
+        addTicketIfMinMenuItem.setText(localeManager.getName("main.addIfMin"));
+        executeScriptMenuItem.setText(localeManager.getName("main.executeScript"));
 
         eventDate.setCellValueFactory(ticket -> new SimpleObjectProperty<>(DateFormat.getDateInstance(DateFormat.DEFAULT, localeManager.getLocale()).format(Date.from(ticket.getValue().getEvent().getDate().atZone(ZoneId.systemDefault()).toInstant()))));
         ticketDate.setCellValueFactory(ticket -> new SimpleObjectProperty<>(DateFormat.getDateInstance(DateFormat.DEFAULT, localeManager.getLocale()).format(ticket.getValue().getCreationDate())));
